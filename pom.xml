@@ -30,6 +30,10 @@
 
 	<properties>
 		<magnolia.version>6.2.37</magnolia.version>
+
+		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+		<gson.version>2.10.1</gson.version>
+
 		<!--Test dependency versions-->
 		<junit.version>5.7.1</junit.version>
 		<mockito.version>3.7.7</mockito.version>
@@ -79,6 +83,17 @@
 		<dependency>
 			<groupId>info.magnolia.imaging</groupId>
 			<artifactId>magnolia-imaging</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
 		</dependency>
 
 

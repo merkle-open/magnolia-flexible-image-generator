@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+    <name>magnolia-flexible-image-generator</name>
+    <displayName>Flexible-Image-Generator</displayName>
+    <description>Magnolia image generator that uses json definitions to generate images</description>
+    <class>com.merkle.oss.magnolia.imaging.flexible.FlexibleImageGeneratorModule</class>
+    <versionHandler>com.merkle.oss.magnolia.imaging.flexible.configuration.FlexibleImageGeneratorModuleVersionHandler</versionHandler>
+    <version>${project.version}</version>
+
+    <components>
+        <id>main</id>
+        <component>
+            <type>com.merkle.oss.magnolia.imaging.flexible.model.ImageModel$Factory</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.model.ImageModel$Factory</implementation>
+        </component>
+        <component>
+            <type>com.merkle.oss.magnolia.imaging.flexible.model.LocalizedAsset$Factory</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.model.LocalizedAsset$Factory</implementation>
+        </component>
+        <component>
+            <type>com.merkle.oss.magnolia.imaging.flexible.util.LocalizedPropertyNameProvider</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.util.DefaultLocalizedPropertyNameProvider</implementation>
+        </component>
+        <component>
+            <type>com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider</implementation>
+            <scope>singleton</scope>
+        </component>
+    </components>
+
+    <dependencies>
+        <dependency>
+            <name>core</name>
+        </dependency>
+        <dependency>
+            <name>imaging</name>
+        </dependency>
+    </dependencies>
+</module>
