@@ -40,8 +40,9 @@ public class ImageOperationProvider {
 				resize.setMaxHeight(parameter.getHeight().orElse(Integer.MAX_VALUE));
 				chain.addOperation(resize);
 			}
+			return chain;
 		}
-		return chain;
+		throw new IllegalArgumentException("Invalid parameter " + parameter);
 	}
 
 	private boolean isSizeValid(@Nullable final Integer width, @Nullable final Integer height) {
