@@ -10,9 +10,12 @@
 
     <components>
         <id>main</id>
+        <configurer>
+            <class>com.merkle.oss.magnolia.imaging.flexible.configuration.FlexibleImageGeneratorGuiceComponentConfigurer</class>
+        </configurer>
         <component>
             <type>com.merkle.oss.magnolia.imaging.flexible.model.ImageModel$Factory</type>
-            <implementation>com.merkle.oss.magnolia.imaging.flexible.model.ImageModel$Factory</implementation>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.model.CombinedImageModelFactory</implementation>
         </component>
         <component>
             <type>com.merkle.oss.magnolia.imaging.flexible.model.LocalizedAsset$Factory</type>

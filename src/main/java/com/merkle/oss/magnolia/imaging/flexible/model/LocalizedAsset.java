@@ -60,7 +60,7 @@ public class LocalizedAsset extends AssetDecorator {
 			this.localizedPropertyNameProvider = localizedPropertyNameProvider;
 		}
 
-		public AssetDecorator create(final Locale locale, final Asset asset) {
+		public LocalizedAsset create(final Locale locale, final Asset asset) {
 			return new LocalizedAsset(
 					asset,
 					getTitle(locale, asset),

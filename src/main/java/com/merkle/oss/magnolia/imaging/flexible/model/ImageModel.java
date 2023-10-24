@@ -1,15 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import com.merkle.oss.magnolia.imaging.flexible.bundle.Bundle;
-import com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider;
-import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageVariation;
-import com.merkle.oss.magnolia.imaging.flexible.bundle.ImageSize;
-import info.magnolia.dam.api.Asset;
-import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
-
-import javax.inject.Inject;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ImageModel {
 	private final String alt;
@@ -150,82 +141,10 @@ public class ImageModel {
 		}
 	}
 
-	public static class Factory {
-		private static final Set<String> EXCLUDE_FROM_GENERATION_MIME_TYPES = Set.of(
-				"image/svg+xml",
-				"image/gif"
-		);
-		private final BundlesProvider bundlesProvider;
-		private final FlexibleImageVariation flexibleImageVariation;
-		private final DamTemplatingFunctions damTemplatingFunctions;
-		private final LocalizedAsset.Factory localizedAssetFactory;
-
-		@Inject
-		public Factory(
-				final BundlesProvider bundlesProvider,
-				final FlexibleImageVariation flexibleImageVariation,
-				final DamTemplatingFunctions damTemplatingFunctions,
-				final LocalizedAsset.Factory localizedAssetFactory
-		) {
-			this.bundlesProvider = bundlesProvider;
-			this.flexibleImageVariation = flexibleImageVariation;
-			this.damTemplatingFunctions = damTemplatingFunctions;
-			this.localizedAssetFactory = localizedAssetFactory;
-		}
-
-		public Optional<ImageModel> create(
-				final Locale locale,
-				final String assetId,
-				final String bundleName
-		) {
-			return Optional.ofNullable(damTemplatingFunctions.getAsset(assetId))
-					.map(asset -> localizedAssetFactory.create(locale, asset))
-					.flatMap(localizedAsset ->
-							bundlesProvider.get(bundleName).map(bundle ->
-									new ImageModel(
-											localizedAsset.getCaption(),
-											localizedAsset.getTitle(),
-											localizedAsset.getDescription(),
-											localizedAsset.getLink(),
-											localizedAsset.getName(),
-											getSrcSet(bundle, localizedAsset),
-											getCustomRenditions(bundle, localizedAsset)
-									)
-							)
-					);
-		}
-
-		private List<Rendition> getSrcSet(final Bundle bundle, final Asset asset) {
-			if(shouldNotGenerateImage(asset)) {
-				return Collections.emptyList();
-			}
-			return bundle.getImageSizes()
-					.stream()
-					.map(size ->
-							new Rendition(size.getMedia(), size.getWidth(), size.getHeight(), getUrl(size, asset))
-					)
-					.collect(Collectors.toList());
-		}
-
-		private Map<String, String> getCustomRenditions(final Bundle bundle, final Asset asset) {
-			if(shouldNotGenerateImage(asset)) {
-				return Collections.emptyMap();
-			}
-			return bundle.getCustomRenditions()
-					.stream()
-					.collect(Collectors.toUnmodifiableMap(
-							CustomRendition::getName,
-							rendition -> getUrl(rendition, asset),
-							(r1, r2) -> r1 // merge function: if there is a duplicate definition use the first one
-					));
-		}
-
-		private String getUrl(final ImageSize size, final Asset asset) {
-			return flexibleImageVariation.createLink(size, asset);
-		}
-
-		private boolean shouldNotGenerateImage(final Asset asset) {
-			return EXCLUDE_FROM_GENERATION_MIME_TYPES.contains(asset.getMimeType());
-		}
+	public interface Factory {
+		/**
+		 * @return an imageModel if the assedId matches (e.g. "jcr:..." for dam) or empty
+		 */
+		Optional<ImageModel> create(Locale locale, String assetId, String bundleName);
 	}
 }
