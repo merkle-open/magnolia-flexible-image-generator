@@ -1,6 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageVariation;
+import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageUriFactory;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.dam.api.Asset;
@@ -18,19 +18,19 @@ public class DamImageModelFactory implements ImageModel.Factory {
 			"image/gif"
 	);
 	private final ProcessedBundlesProvider bundlesProvider;
-	private final FlexibleImageVariation flexibleImageVariation;
+	private final FlexibleImageUriFactory flexibleImageUriFactory;
 	private final DamTemplatingFunctions damTemplatingFunctions;
 	private final LocalizedAsset.Factory localizedAssetFactory;
 
 	@Inject
 	public DamImageModelFactory(
 			final ProcessedBundlesProvider bundlesProvider,
-			final FlexibleImageVariation flexibleImageVariation,
+			final FlexibleImageUriFactory flexibleImageUriFactory,
 			final DamTemplatingFunctions damTemplatingFunctions,
 			final LocalizedAsset.Factory localizedAssetFactory
 	) {
 		this.bundlesProvider = bundlesProvider;
-		this.flexibleImageVariation = flexibleImageVariation;
+		this.flexibleImageUriFactory = flexibleImageUriFactory;
 		this.damTemplatingFunctions = damTemplatingFunctions;
 		this.localizedAssetFactory = localizedAssetFactory;
 	}
@@ -93,7 +93,8 @@ public class DamImageModelFactory implements ImageModel.Factory {
 	}
 
 	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset) {
-		return flexibleImageVariation.createLink(size, asset);
+		final FlexibleParameter parameter = new FlexibleParameter(size.getWidth(), size.getHeight(), size.isCrop(), asset);
+		return flexibleImageUriFactory.create(parameter).toString();
 	}
 
 	private boolean shouldNotGenerateImage(final Asset asset) {
