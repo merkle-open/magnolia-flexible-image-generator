@@ -1,6 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.operations.ImageOperationChain;
@@ -16,10 +16,10 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ImageOperationProvider {
-	private final BundlesProvider bundlesProvider;
+	private final ProcessedBundlesProvider bundlesProvider;
 
 	@Inject
-	public ImageOperationProvider(final BundlesProvider bundlesProvider) {
+	public ImageOperationProvider(final ProcessedBundlesProvider bundlesProvider) {
 		this.bundlesProvider = bundlesProvider;
 	}
 

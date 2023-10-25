@@ -26,8 +26,8 @@
             <implementation>com.merkle.oss.magnolia.imaging.flexible.util.DefaultLocalizedPropertyNameProvider</implementation>
         </component>
         <component>
-            <type>com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider</type>
-            <implementation>com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider</implementation>
+            <type>com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider</implementation>
             <scope>singleton</scope>
         </component>
     </components>

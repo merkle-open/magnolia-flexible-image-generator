@@ -1,0 +1,31 @@
+[
+	{
+		"bundle": "1x1",
+		"description": "ratio 1:1 bundle, VP xs - sm 12cols wide, VP md-xl 8cols wide",
+		"ratio": 1.0,
+		"imageSizes": [
+			{
+				"id": "560w",
+				"width": 560
+			},
+			{
+				"id": "1000w",
+				"width": 1000
+			},
+			{
+				"id": "2000w",
+				"width": 2000
+			}
+		],
+		"customRenditions": [
+			{
+				"id": "fallbackImage",
+				"width": 560
+			},
+			{
+				"id": "previewImage",
+				"width": 10
+			}
+		]
+	}
+]

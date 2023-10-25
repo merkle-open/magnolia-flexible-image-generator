@@ -1,0 +1,32 @@
+[
+	{
+		"bundle": "16x9",
+		"description": "ratio 16:9 bundle, VP xs - xl 12cols wide",
+		"ratio": 1.77777,
+		"crop": false,
+		"imageSizes": [
+			{
+				"media": "560w",
+				"width": 560
+			},
+			{
+				"media": "1120w",
+				"width": 1120
+			},
+			{
+				"media": "2208w",
+				"width": 2208
+			}
+		],
+		"customRenditions": [
+			{
+				"name": "fallbackImage",
+				"width": 560
+			},
+			{
+				"name": "previewImage",
+				"width": 16
+			}
+		]
+	}
+]

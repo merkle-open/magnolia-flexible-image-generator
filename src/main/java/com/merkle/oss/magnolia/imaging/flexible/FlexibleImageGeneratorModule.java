@@ -1,7 +1,7 @@
 package com.merkle.oss.magnolia.imaging.flexible;
 
 import com.google.inject.Provider;
-import com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.module.ModuleLifecycle;
 import info.magnolia.module.ModuleLifecycleContext;
 import org.slf4j.Logger;
@@ -11,10 +11,10 @@ import java.lang.invoke.MethodHandles;
 
 public class FlexibleImageGeneratorModule implements ModuleLifecycle {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	private final Provider<BundlesProvider> bundlesProviderProvider;
+	private final Provider<ProcessedBundlesProvider> bundlesProviderProvider;
 	private String bundlesConfigPath;
 
-	public FlexibleImageGeneratorModule(final Provider<BundlesProvider> bundlesProviderProvider){
+	public FlexibleImageGeneratorModule(final Provider<ProcessedBundlesProvider> bundlesProviderProvider){
 		this.bundlesProviderProvider = bundlesProviderProvider;
 	}
 

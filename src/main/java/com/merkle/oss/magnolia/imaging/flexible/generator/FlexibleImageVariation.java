@@ -1,10 +1,9 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.merkle.oss.magnolia.imaging.flexible.bundle.ImageSize;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.jcr.DamConstants;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -22,8 +21,8 @@ public class FlexibleImageVariation {
 	public static final String SIZE = "size";
 	public static final String CROP = "crop";
 
-	public String createLink(final ImageSize imageSize, final Asset asset) {
-		final String imageSizePart = getImageSizePart(imageSize);
+	public String createLink(final ProcessedBundle.ImageSize size, final Asset asset) {
+		final String imageSizePart = getImageSizePart(size);
 		return MgnlContext.getContextPath()
 				+ "/.imaging"
 				+ "/" + FlexibleImageGenerator.GENERATOR_NAME
@@ -47,19 +46,10 @@ public class FlexibleImageVariation {
 		return URLEncoder.encode(string, CHARSET);
 	}
 
-	private String getImageSizePart(final ImageSize imageSize) {
-		if (imageSize.getWidth() != null && imageSize.getHeight() == null) {
-			return WIDTH + "/" + imageSize.getWidth();
+	private String getImageSizePart(ProcessedBundle.ImageSize size) {
+		if (size.isCrop()) {
+			return CROP + "/" + size.getWidth() + "x" + size.getHeight();
 		}
-		if (imageSize.getWidth() == null && imageSize.getHeight() != null) {
-			return HEIGHT + "/" + imageSize.getHeight();
-		}
-		if (imageSize.getWidth() != null && imageSize.getHeight() != null) {
-			if (imageSize.isCrop() != null && imageSize.isCrop()) {
-				return CROP + "/" + imageSize.getWidth() + "x" + imageSize.getHeight();
-			}
-			return SIZE + "/" + imageSize.getWidth() + "x" + imageSize.getHeight();
-		}
-		return StringUtils.EMPTY;
+		return SIZE + "/" + size.getWidth() + "x" + size.getHeight();
 	}
 }

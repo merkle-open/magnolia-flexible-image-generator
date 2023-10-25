@@ -1,9 +1,8 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import com.merkle.oss.magnolia.imaging.flexible.bundle.Bundle;
-import com.merkle.oss.magnolia.imaging.flexible.bundle.BundlesProvider;
-import com.merkle.oss.magnolia.imaging.flexible.bundle.ImageSize;
 import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageVariation;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.jcr.DamConstants;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
@@ -18,14 +17,14 @@ public class DamImageModelFactory implements ImageModel.Factory {
 			"image/svg+xml",
 			"image/gif"
 	);
-	private final BundlesProvider bundlesProvider;
+	private final ProcessedBundlesProvider bundlesProvider;
 	private final FlexibleImageVariation flexibleImageVariation;
 	private final DamTemplatingFunctions damTemplatingFunctions;
 	private final LocalizedAsset.Factory localizedAssetFactory;
 
 	@Inject
 	public DamImageModelFactory(
-			final BundlesProvider bundlesProvider,
+			final ProcessedBundlesProvider bundlesProvider,
 			final FlexibleImageVariation flexibleImageVariation,
 			final DamTemplatingFunctions damTemplatingFunctions,
 			final LocalizedAsset.Factory localizedAssetFactory
@@ -56,7 +55,7 @@ public class DamImageModelFactory implements ImageModel.Factory {
 
 	private ImageModel create(
 			final LocalizedAsset asset,
-			final Bundle bundle) {
+			final ProcessedBundle bundle) {
 		return new ImageModel(
 				asset.getCaption(),
 				asset.getTitle(),
@@ -68,32 +67,32 @@ public class DamImageModelFactory implements ImageModel.Factory {
 		);
 	}
 
-	private List<ImageModel.Rendition> getSrcSet(final Bundle bundle, final Asset asset) {
+	private List<ImageModel.Rendition> getSrcSet(final ProcessedBundle bundle, final Asset asset) {
 		if (shouldNotGenerateImage(asset)) {
 			return Collections.emptyList();
 		}
 		return bundle.getImageSizes()
 				.stream()
 				.map(size ->
-						new ImageModel.Rendition(size.getMedia(), size.getWidth(), size.getHeight(), getUrl(size, asset))
+						new ImageModel.Rendition(size.getId(), size.getWidth(), size.getHeight(), getUrl(size, asset))
 				)
 				.collect(Collectors.toList());
 	}
 
-	private Map<String, String> getCustomRenditions(final Bundle bundle, final Asset asset) {
+	private Map<String, String> getCustomRenditions(final ProcessedBundle bundle, final Asset asset) {
 		if (shouldNotGenerateImage(asset)) {
 			return Collections.emptyMap();
 		}
 		return bundle.getCustomRenditions()
 				.stream()
 				.collect(Collectors.toUnmodifiableMap(
-						CustomRendition::getName,
+						ProcessedBundle.ImageSize::getId,
 						rendition -> getUrl(rendition, asset),
 						(r1, r2) -> r1 // merge function: if there is a duplicate definition use the first one
 				));
 	}
 
-	private String getUrl(final ImageSize size, final Asset asset) {
+	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset) {
 		return flexibleImageVariation.createLink(size, asset);
 	}
 
