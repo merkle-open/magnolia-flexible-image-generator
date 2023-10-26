@@ -17,7 +17,7 @@ class BundlesParserTest {
 
 		assertEquals(
 				List.of(
-						new Bundle("1x1", 1.0, null,
+						new Bundle("1x1", 1.0,
 								List.of(
 										new Bundle.ImageSize("560w", 560),
 										new Bundle.ImageSize("1000w", 1000),
@@ -28,7 +28,7 @@ class BundlesParserTest {
 										new Bundle.ImageSize("previewImage", 10)
 								)
 						),
-						new Bundle("16x9", 1.77777, false,
+						new Bundle("16x9", 1.77777,
 								List.of(
 										new Bundle.ImageSize("560w", 560),
 										new Bundle.ImageSize("1120w", 1120),

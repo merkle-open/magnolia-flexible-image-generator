@@ -1,5 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ImageModel {
@@ -145,6 +146,9 @@ public class ImageModel {
 		/**
 		 * @return an imageModel if the assedId matches (e.g. "jcr:..." for dam) or empty
 		 */
-		Optional<ImageModel> create(Locale locale, String assetId, String bundleName);
+		default Optional<ImageModel> create(Locale locale, String assetId, String bundleName) {
+			return create(locale, assetId, bundleName, null);
+		}
+		Optional<ImageModel> create(Locale locale, String assetId, String bundleName, @Nullable DynamicImageParameter dynamicImageParameter);
 	}
 }

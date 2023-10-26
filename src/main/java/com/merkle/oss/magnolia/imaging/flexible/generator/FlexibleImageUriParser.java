@@ -2,6 +2,7 @@ package com.merkle.oss.magnolia.imaging.flexible.generator;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
+import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
 import javax.inject.Inject;
@@ -14,10 +15,10 @@ import java.util.stream.Stream;
 
 public class FlexibleImageUriParser {
 	/*
-	 * /<context>/.imaging/flex/assetItemKey/fileName
-	 * e.g. http://localhost:8080/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/dummy1-1600x900.jpg
+	 * /<context>/.imaging/flex/assetItemKey/param1Key/param1Value/.../fileName
+	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/316/width/560/dummy1-1600x900.jpg
 	 */
-	private static final Pattern URI_PATTERN = Pattern.compile("^(/[^/]+|)/.imaging/flex/([^/]+)/[^/]+$");
+	private static final Pattern ASSET_ITEM_KEY_PATTERN = Pattern.compile("/.imaging/flex/([^/]+)");
 
 	private final DamTemplatingFunctions damTemplatingFunctions;
 	private final ProcessedBundlesProvider bundlesProvider;
@@ -34,21 +35,31 @@ public class FlexibleImageUriParser {
 		this.flexibleParameterFactory = flexibleParameterFactory;
 	}
 
-	//http://localhost:8080/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/dummy1-1600x900.jpg
 	public Optional<FlexibleParameter> parse(final HttpServletRequest request) {
-		final Matcher matcher = URI_PATTERN.matcher(request.getRequestURI());
-		if (matcher.find()) {
-			final String assetItemKey = matcher.group(2);
-			return Optional
-					.ofNullable(damTemplatingFunctions.getAsset(assetItemKey))
-					.flatMap(asset ->
-							flexibleParameterFactory.create(asset, key -> Optional.ofNullable(request.getParameter(key)))
-					)
-					.filter(parameter ->
-							isSizeValid(parameter.getWidth(), parameter.getHeight())
-					);
-		}
-		return Optional.empty();
+		final String uri = request.getRequestURI();
+		return getAsset(uri)
+				.flatMap(asset ->
+					flexibleParameterFactory.create(asset, key -> getParameter(uri, key))
+				)
+				.filter(parameter ->
+						isSizeValid(parameter.getWidth(), parameter.getHeight())
+				);
+	}
+
+	private Optional<String> getParameter(final String uri, final String key) {
+		final Pattern pattern = Pattern.compile("/"+key+"/([^/]+)");
+		return Optional
+				.of(pattern.matcher(uri))
+				.filter(Matcher::find)
+				.map(matcher -> matcher.group(1));
+	}
+
+	private Optional<Asset> getAsset(final String uri) {
+		return Optional
+				.of(ASSET_ITEM_KEY_PATTERN.matcher(uri))
+				.filter(Matcher::find)
+				.map(matcher -> matcher.group(1))
+				.map(damTemplatingFunctions::getAsset);
 	}
 
 	private boolean isSizeValid(final int width, final int height) {

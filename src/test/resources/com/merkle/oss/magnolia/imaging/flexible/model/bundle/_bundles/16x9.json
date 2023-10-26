@@ -3,7 +3,6 @@
 		"bundle": "16x9",
 		"description": "ratio 16:9 bundle, VP xs - xl 12cols wide",
 		"ratio": 1.77777,
-		"crop": false,
 		"imageSizes": [
 			{
 				"media": "560w",

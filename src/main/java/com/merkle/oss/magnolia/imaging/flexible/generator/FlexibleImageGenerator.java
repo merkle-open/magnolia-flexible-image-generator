@@ -9,16 +9,12 @@ import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.image.BufferedImage;
-import java.lang.invoke.MethodHandles;
 
 public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvider<FlexibleParameter>> {
-	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	public static final String GENERATOR_NAME = "flex";
 
 	private final ImageOperationProvider imageOperationProvider;
@@ -30,13 +26,11 @@ public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvide
 
 	@Override
 	public BufferedImage generate(final ParameterProvider<FlexibleParameter> parameterProvider) throws ImagingException {
+		final FlexibleParameter parameter = parameterProvider.getParameter();
 		try {
-			final FlexibleParameter parameter = parameterProvider.getParameter();
 			return imageOperationProvider.get(parameter).apply(null, () -> parameter);
 		} catch (Exception e) {
-			final String msg = "Failed to generate image for " + parameterProvider;
-			LOG.error(msg, e);
-			throw new ImagingException(msg, e);
+			throw new ImagingException("Failed to generate image for " + parameter, e);
 		}
 	}
 

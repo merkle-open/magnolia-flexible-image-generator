@@ -5,6 +5,7 @@ import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.jcr.util.NodeTypes;
+import org.apache.jackrabbit.util.Text;
 
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
@@ -18,11 +19,11 @@ public class FlexibleParameterCachingStrategy implements CachingStrategy<Flexibl
 			final ParameterProvider<FlexibleParameter> parameterProvider
 	) {
 		final FlexibleParameter parameter = parameterProvider.getParameter();
-		return "/" + FlexibleImageGenerator.GENERATOR_NAME + "/"
-				+ parameter.getItemKey().asString() + "/"
+		return "/" + generator.getName() + "/"
+				+ Text.escapeIllegalJcrChars(parameter.getItemKey().asString()) + "/"
 				+ parameter.getWidth() + "/"
 				+ parameter.getHeight() + "/"
-				+ (parameter.isCrop() ? "cropped/" : "");
+				+ parameter.getDynamicImageParameter().hashCode();
 	}
 
 	@Override
@@ -30,7 +31,8 @@ public class FlexibleParameterCachingStrategy implements CachingStrategy<Flexibl
 			final Property cachedBinary,
 			final ParameterProvider<FlexibleParameter> parameterProvider
 	) throws RepositoryException {
-		final Calendar cacheLastMod = NodeTypes.LastModified.getLastModified(cachedBinary.getParent().getParent());
+		// getParent - this is assuming the cached node's metadata was updated, not just the binary
+		final Calendar cacheLastMod = NodeTypes.LastModified.getLastModified(cachedBinary.getParent());
 		final Calendar srcLastMod = parameterProvider.getParameter().getLastModified();
 		return cacheLastMod.before(srcLastMod);
 	}

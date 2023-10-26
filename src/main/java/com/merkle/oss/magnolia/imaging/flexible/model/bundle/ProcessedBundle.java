@@ -56,18 +56,15 @@ public class ProcessedBundle {
 		private final int width;
 		private final int height;
 		private final String id;
-		private final boolean crop;
 
 		ImageSize(
 				final int width,
 				final int height,
-				final String id,
-				final boolean crop
+				final String id
 		){
 			this.width = width;
 			this.height = height;
 			this.id = id;
-			this.crop = crop;
 		}
 
 		public int getWidth() {
@@ -82,21 +79,17 @@ public class ProcessedBundle {
 			return id;
 		}
 
-		public boolean isCrop() {
-			return crop;
-		}
-
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
 			ImageSize imageSize = (ImageSize) o;
-			return width == imageSize.width && height == imageSize.height && crop == imageSize.crop && Objects.equals(id, imageSize.id);
+			return width == imageSize.width && height == imageSize.height && Objects.equals(id, imageSize.id);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(width, height, id, crop);
+			return Objects.hash(width, height, id);
 		}
 
 		@Override
@@ -105,7 +98,6 @@ public class ProcessedBundle {
 					"width=" + width +
 					", height=" + height +
 					", id='" + id + '\'' +
-					", crop=" + crop +
 					'}';
 		}
 	}

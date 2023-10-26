@@ -7,6 +7,7 @@ import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.jcr.DamConstants;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -36,11 +37,7 @@ public class DamImageModelFactory implements ImageModel.Factory {
 	}
 
 	@Override
-	public Optional<ImageModel> create(
-			final Locale locale,
-			final String assetId,
-			final String bundleName
-	) {
+	public Optional<ImageModel> create(final Locale locale, final String assetId, final String bundleName, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		return Optional
 				.of(assetId)
 				.filter(id -> StringUtils.startsWith(id, DamConstants.DEFAULT_JCR_PROVIDER_ID + ":"))
@@ -48,38 +45,40 @@ public class DamImageModelFactory implements ImageModel.Factory {
 				.map(asset -> localizedAssetFactory.create(locale, asset))
 				.flatMap(localizedAsset ->
 						bundlesProvider.get(bundleName).map(bundle ->
-								create(localizedAsset, bundle)
+								create(localizedAsset, bundle, dynamicImageParameter)
 						)
 				);
 	}
 
 	private ImageModel create(
 			final LocalizedAsset asset,
-			final ProcessedBundle bundle) {
+			final ProcessedBundle bundle,
+			@Nullable final DynamicImageParameter dynamicImageParameter
+	) {
 		return new ImageModel(
 				asset.getCaption(),
 				asset.getTitle(),
 				asset.getDescription(),
 				asset.getLink(),
 				asset.getName(),
-				getSrcSet(bundle, asset),
-				getCustomRenditions(bundle, asset)
+				getSrcSet(bundle, asset, dynamicImageParameter),
+				getCustomRenditions(bundle, asset, dynamicImageParameter)
 		);
 	}
 
-	private List<ImageModel.Rendition> getSrcSet(final ProcessedBundle bundle, final Asset asset) {
+	private List<ImageModel.Rendition> getSrcSet(final ProcessedBundle bundle, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		if (shouldNotGenerateImage(asset)) {
 			return Collections.emptyList();
 		}
 		return bundle.getImageSizes()
 				.stream()
 				.map(size ->
-						new ImageModel.Rendition(size.getId(), size.getWidth(), size.getHeight(), getUrl(size, asset))
+						new ImageModel.Rendition(size.getId(), size.getWidth(), size.getHeight(), getUrl(size, asset, dynamicImageParameter))
 				)
 				.collect(Collectors.toList());
 	}
 
-	private Map<String, String> getCustomRenditions(final ProcessedBundle bundle, final Asset asset) {
+	private Map<String, String> getCustomRenditions(final ProcessedBundle bundle, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		if (shouldNotGenerateImage(asset)) {
 			return Collections.emptyMap();
 		}
@@ -87,13 +86,13 @@ public class DamImageModelFactory implements ImageModel.Factory {
 				.stream()
 				.collect(Collectors.toUnmodifiableMap(
 						ProcessedBundle.ImageSize::getId,
-						rendition -> getUrl(rendition, asset),
+						rendition -> getUrl(rendition, asset, dynamicImageParameter),
 						(r1, r2) -> r1 // merge function: if there is a duplicate definition use the first one
 				));
 	}
 
-	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset) {
-		final FlexibleParameter parameter = new FlexibleParameter(size.getWidth(), size.getHeight(), size.isCrop(), asset);
+	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
+		final FlexibleParameter parameter = new FlexibleParameter(dynamicImageParameter, size.getWidth(), size.getHeight(), asset);
 		return flexibleImageUriFactory.create(parameter).toString();
 	}
 

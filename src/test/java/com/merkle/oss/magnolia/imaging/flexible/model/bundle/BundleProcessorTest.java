@@ -14,16 +14,16 @@ class BundleProcessorTest {
 				new ProcessedBundle(
 						"16x9",
 						List.of(
-								new ProcessedBundle.ImageSize(560, 316, "560w", false),
-								new ProcessedBundle.ImageSize(1120, 631, "1120w", false),
-								new ProcessedBundle.ImageSize(2208, 1243, "2208w", false)
+								new ProcessedBundle.ImageSize(560, 316, "560w"),
+								new ProcessedBundle.ImageSize(1120, 631, "1120w"),
+								new ProcessedBundle.ImageSize(2208, 1243, "2208w")
 						),
 						List.of(
-								new ProcessedBundle.ImageSize(560, 316, "fallbackImage", false),
-								new ProcessedBundle.ImageSize(16, 10, "previewImage", false)
+								new ProcessedBundle.ImageSize(560, 316, "fallbackImage"),
+								new ProcessedBundle.ImageSize(16, 10, "previewImage")
 						)
 				),
-				new BundleProcessor().process(new Bundle("16x9", 1.77777, false,
+				new BundleProcessor().process(new Bundle("16x9", 1.77777,
 						List.of(
 								new Bundle.ImageSize("560w", 560),
 								new Bundle.ImageSize("1120w", 1120),

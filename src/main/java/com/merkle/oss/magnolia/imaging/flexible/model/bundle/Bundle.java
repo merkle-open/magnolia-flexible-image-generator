@@ -2,7 +2,6 @@ package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,21 +9,17 @@ class Bundle {
 	@SerializedName("bundle")
 	private final String name;
 	private final double ratio;
-	@Nullable
-	private final Boolean crop;
 	private final List<ImageSize> imageSizes;
 	private final List<ImageSize> customRenditions;
 
 	Bundle(
 			final String name,
 			final double ratio,
-			@Nullable final Boolean crop,
 			final List<ImageSize> imageSizes,
 			final List<ImageSize> customRenditions
 	) {
 		this.name = name;
 		this.ratio = ratio;
-		this.crop = crop;
 		this.imageSizes = imageSizes;
 		this.customRenditions = customRenditions;
 	}
@@ -35,11 +30,6 @@ class Bundle {
 
 	public double getRatio() {
 		return ratio;
-	}
-
-	@Nullable
-	public Boolean getCrop() {
-		return crop;
 	}
 
 	public List<ImageSize> getImageSizes() {
@@ -55,12 +45,12 @@ class Bundle {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Bundle bundle = (Bundle) o;
-		return Double.compare(ratio, bundle.ratio) == 0 && Objects.equals(name, bundle.name) && Objects.equals(crop, bundle.crop) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
+		return Double.compare(ratio, bundle.ratio) == 0 && Objects.equals(name, bundle.name) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, ratio, crop, imageSizes, customRenditions);
+		return Objects.hash(name, ratio, imageSizes, customRenditions);
 	}
 
 	@Override
@@ -68,7 +58,6 @@ class Bundle {
 		return "Bundle{" +
 				"name='" + name + '\'' +
 				", ratio=" + ratio +
-				", crop=" + crop +
 				", imageSizes=" + imageSizes +
 				", customRenditions=" + customRenditions +
 				'}';
