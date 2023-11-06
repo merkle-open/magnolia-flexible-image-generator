@@ -147,6 +147,21 @@
 				<version>${mvn.surefire.plugin.version}</version>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>META-INF/magnolia/*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<repositories>
