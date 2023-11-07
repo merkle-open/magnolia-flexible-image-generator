@@ -73,7 +73,7 @@ public class DamImageModelFactory implements ImageModel.Factory {
 		return bundle.getImageSizes()
 				.stream()
 				.map(size ->
-						new ImageModel.Rendition(size.getId(), size.getWidth(), size.getHeight(), getUrl(size, asset, dynamicImageParameter))
+						new ImageModel.Rendition(size.getId(), getUrl(size, asset, dynamicImageParameter))
 				)
 				.collect(Collectors.toList());
 	}
@@ -92,7 +92,7 @@ public class DamImageModelFactory implements ImageModel.Factory {
 	}
 
 	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
-		final FlexibleParameter parameter = new FlexibleParameter(dynamicImageParameter, size.getWidth(), size.getHeight(), asset);
+		final FlexibleParameter parameter = new FlexibleParameter(dynamicImageParameter, size.getRatio().orElse(null), size.getWidth(), asset);
 		return flexibleImageUriFactory.create(parameter).toString();
 	}
 

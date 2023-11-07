@@ -1,10 +1,10 @@
 [
 	{
-		"bundle": "16x9",
-		"description": "ratio 16:9 bundle, VP xs - xl 12cols wide",
-		"ratio": "16:9",
+		"bundle": "stage",
+		"description": "stage bundle, VP xs - xl 12cols wide",
 		"imageSizes": [
 			{
+				"ratio": "1:1",
 				"media": "560w",
 				"width": 560
 			},

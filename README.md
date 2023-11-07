@@ -18,19 +18,19 @@ Magnolia image generator that uses json definitions to generate images.
         {
           "bundle": "16_7-stage",
           "description": "ratio 16:7 bundle for stage image, VP S and M: 12cols wide, VP L: 12cols + container padding (breaking out of grid)",
-          "ratio": 2.285714285714286,
+          "ratio": "16:7",
           "imageSizes": [
             {
               "width": 720,
-              "id": "720w"
+              "media": "720w"
             },
             {
               "width": 1280,
-              "id": "1280w"
+              "media": "1280w"
             },
             {
               "width": 2880,
-              "id": "2880w"
+              "media": "2880w"
             }
           ],
           "customRenditions": [
@@ -43,7 +43,68 @@ Magnolia image generator that uses json definitions to generate images.
       ]
       ```
      
-
+## Bundle schema
+```json
+{
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "title": "bundle",
+   "type": "array",
+   "items": {
+      "type": "object",
+      "properties": {
+         "bundle": {
+            "type": "string",
+            "description": "bundle name"
+         },
+         "ratio": {
+            "type": "string",
+            "description": "e.g. '16:9'. If not specified here or in imageSize, the original image ratio will be preserved"
+         },
+         "imageSizes": {
+            "type": "array",
+            "items": {
+               "type": "object",
+               "properties": {
+                  "width": {
+                     "type": "integer"
+                  },
+                  "media": {
+                     "type": "string",
+                     "description": "The media size for the image (e.g. '2880w')"
+                  },
+                  "ratio": {
+                     "type": "string",
+                     "description": "e.g. '16:9'. If not specified here or in the bundle, the original image ratio will be preserved"
+                  }
+               },
+               "required": [ "width", "media" ]
+            }
+         },
+         "customRenditions": {
+            "type": "array",
+            "items": {
+               "type": "object",
+               "properties": {
+                  "width": {
+                     "type": "integer"
+                  },
+                  "id": {
+                     "type": "string",
+                     "description": "identifier"
+                  },
+                  "ratio": {
+                     "type": "string",
+                     "description": "e.g. '16:9'"
+                  }
+               },
+               "required": [ "width", "id" ]
+            }
+         }
+      },
+      "required": [ "bundle", "imageSizes", "customRenditions"]
+   }
+}
+```
 ## Custom image operations
 It is possible to implement custom image operations by extending and binding your own instances:
 
@@ -78,7 +139,7 @@ public class CustomDynamicImageParameter extends DynamicImageParameter {
    public Map<String, String> toMap() {
       return Stream.concat(
               super.toMap().entrySet().stream(),
-              Map.of(Factory.TRIGGER_CUSTOM_OPERATION_PARAM, isTriggerCustomOperation())
+              Map.of(Factory.TRIGGER_CUSTOM_OPERATION_PARAM, isTriggerCustomOperation()).entrySet().stream()
       ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
    }
 

@@ -16,18 +16,19 @@ import java.util.stream.Stream;
 public class FlexibleParameter extends AssetDecorator {
 	@Nullable
 	private final DynamicImageParameter dynamicImageParameter;
+	@Nullable
+	private final String ratio;
 	private final int width;
-	private final int height;
 
 	public FlexibleParameter(
 			@Nullable final DynamicImageParameter dynamicImageParameter,
+			@Nullable final String ratio,
 			final int width,
-			final int height,
 			final Asset asset
 	) {
 		super(asset);
+		this.ratio = ratio;
 		this.width = width;
-		this.height = height;
 		this.dynamicImageParameter = dynamicImageParameter;
 	}
 
@@ -39,18 +40,18 @@ public class FlexibleParameter extends AssetDecorator {
 		return width;
 	}
 
-	public int getHeight() {
-		return height;
+	public Optional<String> getRatio() {
+		return Optional.ofNullable(ratio);
 	}
 
 	public Map<String, String> toMap() {
-		return Stream.concat(
+		return Stream.of(
 				getDynamicImageParameter().stream().map(DynamicImageParameter::toMap).map(Map::entrySet).flatMap(Collection::stream),
+				getRatio().stream().map(ratio -> Map.entry(Factory.RATIO_PARAM, ratio)),
 				Map.of(
-						Factory.WIDTH_PARAM, String.valueOf(getWidth()),
-						Factory.HEIGHT_PARAM, String.valueOf(getHeight())
+						Factory.WIDTH_PARAM, String.valueOf(getWidth())
 				).entrySet().stream()
-		).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (dynamicImageParam, flexibleParam) -> flexibleParam));
+		).flatMap(Function.identity()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (dynamicImageParam, flexibleParam) -> flexibleParam));
 	}
 
 	@Override
@@ -58,26 +59,17 @@ public class FlexibleParameter extends AssetDecorator {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FlexibleParameter that = (FlexibleParameter) o;
-		return width == that.width && height == that.height && Objects.equals(dynamicImageParameter, that.dynamicImageParameter);
+		return width == that.width && Objects.equals(dynamicImageParameter, that.dynamicImageParameter) && Objects.equals(ratio, that.ratio);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dynamicImageParameter, width, height);
-	}
-
-	@Override
-	public String toString() {
-		return "FlexibleParameter{" +
-				"imageParameter=" + dynamicImageParameter +
-				", width=" + width +
-				", height=" + height +
-				'}';
+		return Objects.hash(dynamicImageParameter, ratio, width);
 	}
 
 	public static class Factory {
 		public static final String WIDTH_PARAM = "width";
-		public static final String HEIGHT_PARAM = "height";
+		public static final String RATIO_PARAM = "ratio";
 
 		private final DynamicImageParameter.Factory dynamicImageParameterFactory;
 
@@ -87,14 +79,12 @@ public class FlexibleParameter extends AssetDecorator {
 		}
 
 		public Optional<FlexibleParameter> create(final Asset asset, final Function<String, Optional<String>> parameterProvider) {
-			return parameterProvider.apply(WIDTH_PARAM).map(Integer::parseInt).flatMap(width ->
-					parameterProvider.apply(HEIGHT_PARAM).map(Integer::parseInt).map(height ->
-							new FlexibleParameter(
-									dynamicImageParameterFactory.create(parameterProvider).orElse(null),
-									width,
-									height,
-									asset
-							)
+			return parameterProvider.apply(WIDTH_PARAM).map(Integer::parseInt).map(width ->
+					new FlexibleParameter(
+							dynamicImageParameterFactory.create(parameterProvider).orElse(null),
+							parameterProvider.apply(RATIO_PARAM).orElse(null),
+							width,
+							asset
 					)
 			);
 		}

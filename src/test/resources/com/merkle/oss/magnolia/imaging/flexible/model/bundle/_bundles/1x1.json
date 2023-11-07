@@ -2,7 +2,7 @@
 	{
 		"bundle": "1x1",
 		"description": "ratio 1:1 bundle, VP xs - sm 12cols wide, VP md-xl 8cols wide",
-		"ratio": 1.0,
+		"ratio": "1:1",
 		"imageSizes": [
 			{
 				"id": "560w",

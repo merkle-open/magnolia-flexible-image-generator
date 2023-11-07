@@ -22,7 +22,7 @@ public class FlexibleParameterCachingStrategy implements CachingStrategy<Flexibl
 		return "/" + generator.getName() + "/"
 				+ Text.escapeIllegalJcrChars(parameter.getItemKey().asString()) + "/"
 				+ parameter.getWidth() + "/"
-				+ parameter.getHeight() + "/"
+				+ parameter.getRatio().map(Text::escapeIllegalJcrChars).orElse("keepRatio") + "/"
 				+ parameter.getDynamicImageParameter().hashCode();
 	}
 

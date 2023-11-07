@@ -1,7 +1,9 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ProcessedBundle {
 	private final String name;
@@ -53,26 +55,27 @@ public class ProcessedBundle {
 	}
 
 	public static class ImageSize {
+		@Nullable
+		private final String ratio;
 		private final int width;
-		private final int height;
 		private final String id;
 
 		ImageSize(
+				@Nullable final String ratio,
 				final int width,
-				final int height,
 				final String id
 		){
+			this.ratio = ratio;
 			this.width = width;
-			this.height = height;
 			this.id = id;
+		}
+
+		public Optional<String> getRatio() {
+			return Optional.ofNullable(ratio);
 		}
 
 		public int getWidth() {
 			return width;
-		}
-
-		public int getHeight() {
-			return height;
 		}
 
 		public String getId() {
@@ -84,19 +87,19 @@ public class ProcessedBundle {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
 			ImageSize imageSize = (ImageSize) o;
-			return width == imageSize.width && height == imageSize.height && Objects.equals(id, imageSize.id);
+			return width == imageSize.width && Objects.equals(ratio, imageSize.ratio) && Objects.equals(id, imageSize.id);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(width, height, id);
+			return Objects.hash(ratio, width, id);
 		}
 
 		@Override
 		public String toString() {
 			return "ImageSize{" +
-					"width=" + width +
-					", height=" + height +
+					"ratio='" + ratio + '\'' +
+					", width=" + width +
 					", id='" + id + '\'' +
 					'}';
 		}

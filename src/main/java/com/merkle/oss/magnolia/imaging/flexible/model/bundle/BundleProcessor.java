@@ -1,33 +1,48 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BundleProcessor {
+	private final RatioParser ratioParser;
+
+	@Inject
+	public BundleProcessor(final RatioParser ratioParser) {
+		this.ratioParser = ratioParser;
+	}
 
 	ProcessedBundle process(final Bundle bundle) {
 		return new ProcessedBundle(
 				bundle.getName(),
-				processImageSizes(bundle.getImageSizes(), bundle.getRatio()),
-				processImageSizes(bundle.getCustomRenditions(), bundle.getRatio())
+				processImageSizes(bundle.getName(), bundle.getImageSizes(), bundle.getRatio().orElse(null)),
+				processImageSizes(bundle.getName(), bundle.getCustomRenditions(), bundle.getRatio().orElse(null))
 		);
 	}
 
-	private List<ProcessedBundle.ImageSize> processImageSizes(final List<Bundle.ImageSize> imageSizes, final double ratio) {
+	private List<ProcessedBundle.ImageSize> processImageSizes(
+			final String bundleName,
+			final List<Bundle.ImageSize> imageSizes,
+			@Nullable final String bundleRatio
+	) {
 		return imageSizes.stream()
 				.map(imageSize ->
 						new ProcessedBundle.ImageSize(
+								validateRatioOrThrow(bundleName, imageSize.getRatio().orElse(bundleRatio)),
 								imageSize.getWidth(),
-								calculateHeight(imageSize.getWidth(), ratio),
 								imageSize.getId()
 						)
 				)
 				.collect(Collectors.toList());
 	}
 
-	private int calculateHeight(final int width, final double ratio) {
-		return BigDecimal.valueOf(width / ratio).setScale(0, RoundingMode.UP).intValue();
+	private String validateRatioOrThrow(final String bundleName, @Nullable final String ratio) {
+		if(ratio != null) {
+			ratioParser.parse(ratio).orElseThrow(() ->
+					new IllegalArgumentException("invalid ratio "+ratio+" in bundle "+bundleName)
+			);
+		}
+		return ratio;
 	}
 }

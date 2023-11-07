@@ -46,16 +46,16 @@ class FlexibleParameterCachingStrategyTest {
 	@Test
 	void getCachePath_noDynamicImageParameter() {
 		assertEquals(
-				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/316/0",
-				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(null, 560, 316, asset))
+				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/16%3A9/0",
+				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(null, "16:9", 560, asset))
 		);
 	}
 
 	@Test
 	void getCachePath_dynamicImageParameter() {
 		assertEquals(
-				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/316/1268",
-				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(new DynamicImageParameter(false), 560, 316, asset))
+				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/16%3A9/1268",
+				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(new DynamicImageParameter(false), "16:9", 560, asset))
 		);
 	}
 
@@ -63,13 +63,13 @@ class FlexibleParameterCachingStrategyTest {
 	void shouldRegenerate_assetModifiedAfterCachedBinary_shouldRegenerate() throws RepositoryException {
 		cachedBinaryCalendar.set(2023, Calendar.OCTOBER, 26, 14, 30);
 		assetCalendar.set(2023, Calendar.OCTOBER, 26, 14, 31);
-		assertTrue(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, 560, 316, asset)));
+		assertTrue(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, asset)));
 	}
 
 	@Test
 	void shouldRegenerate_assetModifiedBeforeCachedBinary_shouldNotRegenerate() throws RepositoryException {
 		cachedBinaryCalendar.set(2023, Calendar.OCTOBER, 26, 14, 30);
 		assetCalendar.set(2023, Calendar.OCTOBER, 26, 14, 29);
-		assertFalse(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, 560, 316, asset)));
+		assertFalse(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, asset)));
 	}
 }

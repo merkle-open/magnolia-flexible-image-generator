@@ -30,7 +30,7 @@ class FlexibleImageUriParserTest {
 		final ProcessedBundlesProvider processedBundlesProvider = mock(ProcessedBundlesProvider.class);
 		final ProcessedBundle.ImageSize imageSize = mock(ProcessedBundle.ImageSize.class);
 		doReturn(560).when(imageSize).getWidth();
-		doReturn(316).when(imageSize).getHeight();
+		doReturn(Optional.of("16:9")).when(imageSize).getRatio();
 		final ProcessedBundle processedBundle = mock(ProcessedBundle.class);
 		doReturn(List.of(imageSize)).when(processedBundle).getImageSizes();
 		doReturn(Collections.emptyList()).when(processedBundle).getCustomRenditions();
@@ -42,8 +42,8 @@ class FlexibleImageUriParserTest {
 	@Test
 	void parse_valid() {
 		assertEquals(
-				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), 560, 316, asset)),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/316/width/560/dummy1-1600x900.jpg"))
+				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 560, asset)),
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/width/560/dummy1-1600x900.jpg"))
 		);
 	}
 
@@ -51,7 +51,7 @@ class FlexibleImageUriParserTest {
 	void parse_invalid() {
 		assertEquals(
 				Optional.empty(),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/390/width/560/dummy1-1600x900.jpg"))
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:10/width/560/dummy1-1600x900.jpg"))
 		);
 	}
 

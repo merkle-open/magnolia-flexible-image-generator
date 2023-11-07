@@ -5,6 +5,7 @@ import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesPro
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class FlexibleImageUriParser {
 					flexibleParameterFactory.create(asset, key -> getParameter(uri, key))
 				)
 				.filter(parameter ->
-						isSizeValid(parameter.getWidth(), parameter.getHeight())
+						isSizeValid(parameter.getWidth(), parameter.getRatio().orElse(null))
 				);
 	}
 
@@ -62,7 +63,7 @@ public class FlexibleImageUriParser {
 				.map(damTemplatingFunctions::getAsset);
 	}
 
-	private boolean isSizeValid(final int width, final int height) {
+	private boolean isSizeValid(final int width, @Nullable final String ratio) {
 		return bundlesProvider.get().stream()
 				.flatMap(bundle ->
 						Stream.concat(
@@ -71,7 +72,7 @@ public class FlexibleImageUriParser {
 						)
 				)
 				.anyMatch(size ->
-						Objects.equals(size.getWidth(), width) && Objects.equals(size.getHeight(), height)
+						Objects.equals(size.getWidth(), width) && Objects.equals(size.getRatio().orElse(null), ratio)
 				);
 	}
 }

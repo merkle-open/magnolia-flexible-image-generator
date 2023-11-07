@@ -2,19 +2,22 @@ package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
 import com.google.gson.annotations.SerializedName;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 class Bundle {
 	@SerializedName("bundle")
 	private final String name;
-	private final double ratio;
+	@Nullable
+	private final String ratio;
 	private final List<ImageSize> imageSizes;
 	private final List<ImageSize> customRenditions;
 
 	Bundle(
 			final String name,
-			final double ratio,
+			@Nullable final String ratio,
 			final List<ImageSize> imageSizes,
 			final List<ImageSize> customRenditions
 	) {
@@ -28,8 +31,8 @@ class Bundle {
 		return name;
 	}
 
-	public double getRatio() {
-		return ratio;
+	public Optional<String> getRatio() {
+		return Optional.ofNullable(ratio);
 	}
 
 	public List<ImageSize> getImageSizes() {
@@ -45,7 +48,7 @@ class Bundle {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Bundle bundle = (Bundle) o;
-		return Double.compare(ratio, bundle.ratio) == 0 && Objects.equals(name, bundle.name) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
+		return Objects.equals(name, bundle.name) && Objects.equals(ratio, bundle.ratio) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
 	}
 
 	@Override
@@ -67,13 +70,17 @@ class Bundle {
 		@SerializedName(value = "id", alternate = {"media", "name"})
 		private final String id;
 		private final int width;
+		@Nullable
+		private final String ratio;
 
 		ImageSize(
-				String id,
-				int width
+				final String id,
+				final int width,
+				@Nullable final String ratio
 		) {
 			this.width = width;
 			this.id = id;
+			this.ratio = ratio;
 		}
 
 		public String getId() {
@@ -84,17 +91,21 @@ class Bundle {
 			return width;
 		}
 
+		public Optional<String> getRatio() {
+			return Optional.ofNullable(ratio);
+		}
+
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
 			ImageSize imageSize = (ImageSize) o;
-			return width == imageSize.width && Objects.equals(id, imageSize.id);
+			return width == imageSize.width && Objects.equals(id, imageSize.id) && Objects.equals(ratio, imageSize.ratio);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(id, width);
+			return Objects.hash(id, width, ratio);
 		}
 
 		@Override
@@ -102,6 +113,7 @@ class Bundle {
 			return "ImageSize{" +
 					"id='" + id + '\'' +
 					", width=" + width +
+					", ratio=" + ratio +
 					'}';
 		}
 	}

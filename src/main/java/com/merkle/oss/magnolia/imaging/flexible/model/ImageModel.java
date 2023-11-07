@@ -86,32 +86,18 @@ public class ImageModel {
 
 	public static class Rendition {
 		private final String media;
-		private final Integer width;
-		private final Integer height;
 		private final String src;
 
 		public Rendition(
 				final String media,
-				final Integer width,
-				final Integer height,
 				final String src
 		) {
 			this.media = media;
-			this.width = width;
-			this.height = height;
 			this.src = src;
 		}
 
 		public String getMedia() {
 			return media;
-		}
-
-		public Integer getWidth() {
-			return width;
-		}
-
-		public Integer getHeight() {
-			return height;
 		}
 
 		public String getSrc() {
@@ -123,20 +109,18 @@ public class ImageModel {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
 			Rendition rendition = (Rendition) o;
-			return Objects.equals(media, rendition.media) && Objects.equals(width, rendition.width) && Objects.equals(height, rendition.height) && Objects.equals(src, rendition.src);
+			return Objects.equals(media, rendition.media) && Objects.equals(src, rendition.src);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(media, width, height, src);
+			return Objects.hash(media, src);
 		}
 
 		@Override
 		public String toString() {
 			return "Rendition{" +
 					"media='" + media + '\'' +
-					", width=" + width +
-					", height=" + height +
 					", src='" + src + '\'' +
 					'}';
 		}
