@@ -9,6 +9,7 @@ import org.apache.http.client.utils.URIBuilder;
 import java.net.URI;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public class FlexibleImageUriFactory {
 										".imaging",
 										FlexibleImageGenerator.GENERATOR_NAME,
 										parameter.getItemKey().asString()
-								),
+								).filter(Predicate.not(String::isBlank)),
 								parameter.toMap().entrySet().stream().sorted(Map.Entry.comparingByKey()).flatMap(p -> Stream.of(p.getKey(), p.getValue())),
 								Stream.of(parameter.getFileName())
 						).flatMap(Function.identity()).collect(Collectors.toList())
