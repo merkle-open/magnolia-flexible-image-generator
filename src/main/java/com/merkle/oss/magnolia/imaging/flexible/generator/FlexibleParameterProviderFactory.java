@@ -1,5 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
+import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;

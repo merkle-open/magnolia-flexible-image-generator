@@ -67,6 +67,15 @@ public class FlexibleParameter extends AssetDecorator {
 		return Objects.hash(dynamicImageParameter, ratio, width);
 	}
 
+	@Override
+	public String toString() {
+		return "FlexibleParameter{" +
+				"dynamicImageParameter=" + dynamicImageParameter +
+				", ratio='" + ratio + '\'' +
+				", width=" + width +
+				"} " + super.toString();
+	}
+
 	public static class Factory {
 		public static final String WIDTH_PARAM = "width";
 		public static final String RATIO_PARAM = "ratio";

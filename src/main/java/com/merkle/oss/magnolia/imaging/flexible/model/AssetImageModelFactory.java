@@ -1,6 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageUriFactory;
+import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriFactory;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.dam.api.Asset;

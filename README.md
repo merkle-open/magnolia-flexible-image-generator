@@ -224,3 +224,26 @@ public class CustomImageOperationProvider extends ImageOperationProvider {
    <implementation>com.somepackage.CustomImageOperationProvider</implementation>
 </component>
 ```
+
+## Hashed uri configuration
+To prevent unnecessary generation of images, hashed uri factory/parser can be bound, which generate a hash over the 
+created uri and checks it when parsing, resulting in 404 if it has been modified. 
+### Guice binding
+```xml
+<components>
+   ...
+   <component>
+      <type>com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser</type>
+      <implementation>com.merkle.oss.magnolia.imaging.flexible.generator.uri.HashedFlexibleImageUriParser</implementation>
+   </component>
+   <component>
+      <type>com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriFactory</type>
+      <implementation>com.merkle.oss.magnolia.imaging.flexible.generator.uri.HashedFlexibleImageUriFactory</implementation>
+   </component>
+   ...
+</components>
+```
+### Salt property
+```properties
+com.merkle.oss.magnolia.imaging.flexible.generator.uri.hash.salt=someEncryptedSalt
+```

@@ -1,4 +1,4 @@
-package com.merkle.oss.magnolia.imaging.flexible.generator;
+package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;

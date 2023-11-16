@@ -1,6 +1,7 @@
-package com.merkle.oss.magnolia.imaging.flexible.generator;
+package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
 import com.machinezoo.noexception.Exceptions;
+import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageGenerator;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.context.MgnlContext;
 import org.apache.commons.lang3.StringUtils;

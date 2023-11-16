@@ -1,4 +1,4 @@
-package com.merkle.oss.magnolia.imaging.flexible.generator;
+package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
@@ -38,13 +38,13 @@ public class FlexibleImageUriParser {
 
 	public Optional<FlexibleParameter> parse(final HttpServletRequest request) {
 		final String uri = request.getRequestURI();
-		return getAsset(uri)
-				.flatMap(asset ->
-					flexibleParameterFactory.create(asset, key -> getParameter(uri, key))
-				)
-				.filter(parameter ->
-						isSizeValid(parameter.getWidth(), parameter.getRatio().orElse(null))
-				);
+		return getAsset(uri).flatMap(asset -> parse(uri, asset));
+	}
+
+	protected Optional<FlexibleParameter> parse(final String uri, final Asset asset) {
+		return flexibleParameterFactory.create(asset, key -> getParameter(uri, key)).filter(parameter ->
+				isSizeValid(parameter.getWidth(), parameter.getRatio().orElse(null))
+		);
 	}
 
 	private Optional<String> getParameter(final String uri, final String key) {
