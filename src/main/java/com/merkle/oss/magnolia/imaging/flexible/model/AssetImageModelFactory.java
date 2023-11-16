@@ -4,16 +4,16 @@ import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageUriFactor
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.dam.api.Asset;
-import info.magnolia.dam.jcr.DamConstants;
+import info.magnolia.dam.api.AssetProviderRegistry;
+import info.magnolia.dam.api.ItemKey;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DamImageModelFactory implements ImageModel.Factory {
+public class AssetImageModelFactory implements ImageModel.Factory {
 	private static final Set<String> EXCLUDE_FROM_GENERATION_MIME_TYPES = Set.of(
 			"image/svg+xml",
 			"image/gif"
@@ -21,18 +21,21 @@ public class DamImageModelFactory implements ImageModel.Factory {
 	private final ProcessedBundlesProvider bundlesProvider;
 	private final FlexibleImageUriFactory flexibleImageUriFactory;
 	private final DamTemplatingFunctions damTemplatingFunctions;
+	private final AssetProviderRegistry assetProviderRegistry;
 	private final LocalizedAsset.Factory localizedAssetFactory;
 
 	@Inject
-	public DamImageModelFactory(
+	public AssetImageModelFactory(
 			final ProcessedBundlesProvider bundlesProvider,
 			final FlexibleImageUriFactory flexibleImageUriFactory,
 			final DamTemplatingFunctions damTemplatingFunctions,
+			final AssetProviderRegistry assetProviderRegistry,
 			final LocalizedAsset.Factory localizedAssetFactory
 	) {
 		this.bundlesProvider = bundlesProvider;
 		this.flexibleImageUriFactory = flexibleImageUriFactory;
 		this.damTemplatingFunctions = damTemplatingFunctions;
+		this.assetProviderRegistry = assetProviderRegistry;
 		this.localizedAssetFactory = localizedAssetFactory;
 	}
 
@@ -40,7 +43,7 @@ public class DamImageModelFactory implements ImageModel.Factory {
 	public Optional<ImageModel> create(final Locale locale, final String assetId, final String bundleName, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		return Optional
 				.of(assetId)
-				.filter(id -> StringUtils.startsWith(id, DamConstants.DEFAULT_JCR_PROVIDER_ID + ":"))
+				.filter(this::isValid)
 				.map(damTemplatingFunctions::getAsset)
 				.map(asset -> localizedAssetFactory.create(locale, asset))
 				.flatMap(localizedAsset ->
@@ -48,6 +51,19 @@ public class DamImageModelFactory implements ImageModel.Factory {
 								create(localizedAsset, bundle, dynamicImageParameter)
 						)
 				);
+	}
+
+	private boolean isValid(final String assetId) {
+		return ItemKey.isValid(assetId) && hasAssetProviderFor(ItemKey.from(assetId));
+	}
+
+	private boolean hasAssetProviderFor(final ItemKey itemKey) {
+		try {
+			assetProviderRegistry.getProviderFor(itemKey);
+			return true;
+		} catch (AssetProviderRegistry.NoSuchAssetProviderException e) {
+			return false;
+		}
 	}
 
 	private ImageModel create(
