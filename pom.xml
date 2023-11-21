@@ -29,18 +29,18 @@
 	</developers>
 
 	<properties>
-		<magnolia.version>6.2.39</magnolia.version>
+		<magnolia.version>6.2.40</magnolia.version>
 
 		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
 		<gson.version>2.10.1</gson.version>
 
 		<!--Test dependency versions-->
-		<junit.version>5.10.0</junit.version>
-		<mockito.version>5.6.0</mockito.version>
+		<junit.version>5.10.1</junit.version>
+		<mockito.version>5.7.0</mockito.version>
 
 		<!-- Maven Plugins -->
 		<mvn.compiler.plugin.version>3.11.0</mvn.compiler.plugin.version>
-		<mvn.surefire.plugin.version>3.1.2</mvn.surefire.plugin.version>
+		<mvn.surefire.plugin.version>3.2.2</mvn.surefire.plugin.version>
 		<mvn.source.plugin.version>3.3.0</mvn.source.plugin.version>
 		<mvn.javadoc.version>3.6.0</mvn.javadoc.version>
 		<mvn.gpg.plugin.version>3.1.0</mvn.gpg.plugin.version>
