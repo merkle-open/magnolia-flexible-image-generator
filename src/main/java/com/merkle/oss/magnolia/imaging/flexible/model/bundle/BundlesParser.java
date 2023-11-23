@@ -3,6 +3,8 @@ package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +52,12 @@ public class BundlesParser {
 
 	private Stream<Bundle> create(final String bundlesDirName, final String path) {
 		try {
-			final String filePattern = path + "/**/" + bundlesDirName + "/*.json";
+			final URI uri = getClass().getClassLoader().getResource(path).toURI();
+			final String filePattern = getFilePattern(bundlesDirName, path);
 			LOG.info("Load image bundle definitions which match pattern '{}'", filePattern);
-			final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + filePattern);
+			final PathMatcher matcher = getFileSystem(uri).getPathMatcher("glob:" + filePattern);
 			final Stream.Builder<Stream<Bundle>> bundles = Stream.builder();
 
-			final URI uri = getClass().getClassLoader().getResource(path).toURI();
 			processResource(uri, p -> Files.walkFileTree(p, new SimpleFileVisitor<>() {
 				@Override
 				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) {
@@ -70,6 +72,29 @@ public class BundlesParser {
 			LOG.error("Cannot resolve bundles in resource path "+ path, e);
 			return Stream.empty();
 		}
+	}
+
+	private FileSystem getFileSystem(final URI uri) {
+		try {
+			return FileSystems.getFileSystem(uri);
+		} catch (Exception e) {
+			return FileSystems.getDefault();
+		}
+	}
+
+	private String getFilePattern(final String bundlesDirName, final String path) {
+		StringBuilder pattern = new StringBuilder();
+		if (SystemUtils.IS_OS_WINDOWS) {
+			pattern.append("?:/");
+		}
+		pattern.append(path);
+		if (StringUtils.isNotEmpty(path) && StringUtils.endsWith(path, "/")) {
+			pattern.append('/');
+		}
+		pattern.append("**/")
+				.append(bundlesDirName)
+				.append("/*.json");
+		return pattern.toString();
 	}
 
 	private void processResource(final URI uri, final IOConsumer<Path> consumer) throws IOException {
