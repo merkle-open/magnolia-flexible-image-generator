@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
@@ -24,6 +23,8 @@ import java.util.stream.Stream;
 
 public class BundlesParser {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private static final String OS_NAME = System.getProperty("os.name");
+	private static final String WINDOWS = "Windows";
 
 	Stream<Bundle> parse(final String bundlesConfigFilePath) {
 		return getBundleConfig(bundlesConfigFilePath)
@@ -77,7 +78,7 @@ public class BundlesParser {
 
 	private String getFilePattern(final FileSystem fileSystem, final String bundlesDirName, final String path) {
 		String filePattern = path + "/**/" + bundlesDirName + "/*.json";
-		if (fileSystem.getSeparator().equals(File.separator)) {
+		if (isWindows()) {
 			return StringUtils.removeStart(filePattern, '/');
 		}
 		return filePattern;
@@ -116,6 +117,10 @@ public class BundlesParser {
 				return FileSystems.getDefault();
 			}
 		}
+	}
+
+	private boolean isWindows() {
+		return OS_NAME.startsWith(WINDOWS);
 	}
 
 		interface IOConsumer<T> {
