@@ -3,7 +3,6 @@ package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +22,6 @@ import java.util.stream.Stream;
 
 public class BundlesParser {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	private static final String OS_NAME = System.getProperty("os.name");
-	private static final String WINDOWS = "Windows";
 
 	Stream<Bundle> parse(final String bundlesConfigFilePath) {
 		return getBundleConfig(bundlesConfigFilePath)
@@ -53,16 +50,15 @@ public class BundlesParser {
 
 	private Stream<Bundle> create(final String bundlesDirName, final String path) {
 		try {
-			final URI uri = getClass().getClassLoader().getResource(path).toURI();
-			final FileSystem fileSystem = getFileSystem(uri);
-			final String filePattern = getFilePattern(fileSystem, bundlesDirName, path);
+			final String filePattern = "**" + path + "/**/" + bundlesDirName + "/*.json";
 			LOG.info("Load image bundle definitions which match pattern '{}'", filePattern);
-			final PathMatcher matcher = fileSystem.getPathMatcher("glob:" + filePattern);
 			final Stream.Builder<Stream<Bundle>> bundles = Stream.builder();
 
+			final URI uri = getClass().getClassLoader().getResource(path).toURI();
 			processResource(uri, p -> Files.walkFileTree(p, new SimpleFileVisitor<>() {
 				@Override
 				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) {
+					final PathMatcher matcher = file.getFileSystem().getPathMatcher("glob:" + filePattern);
 					if (matcher.matches(file)) {
 						bundles.accept(create(file));
 					}
@@ -74,14 +70,6 @@ public class BundlesParser {
 			LOG.error("Cannot resolve bundles in resource path "+ path, e);
 			return Stream.empty();
 		}
-	}
-
-	private String getFilePattern(final FileSystem fileSystem, final String bundlesDirName, final String path) {
-		String filePattern = path + "/**/" + bundlesDirName + "/*.json";
-		if (isWindows()) {
-			return StringUtils.removeStart(filePattern, '/');
-		}
-		return filePattern;
 	}
 
 	private void processResource(final URI uri, final IOConsumer<Path> consumer) throws IOException {
@@ -105,22 +93,6 @@ public class BundlesParser {
 			LOG.error("Invalid JSON format {}", bundleJson);
 			return Stream.empty();
 		}
-	}
-
-	private FileSystem getFileSystem(final URI uri) {
-		try {
-			return FileSystems.getFileSystem(uri);
-		} catch (Exception e) {
-			try {
-				return FileSystems.newFileSystem(uri, Collections.emptyMap());
-			} catch (Exception i) {
-				return FileSystems.getDefault();
-			}
-		}
-	}
-
-	private boolean isWindows() {
-		return OS_NAME.startsWith(WINDOWS);
 	}
 
 		interface IOConsumer<T> {
