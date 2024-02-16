@@ -30,6 +30,10 @@
             <implementation>com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider</implementation>
             <scope>singleton</scope>
         </component>
+        <component>
+            <type>com.merkle.oss.magnolia.imaging.flexible.generator.ImageOperationProvider</type>
+            <implementation>com.merkle.oss.magnolia.imaging.flexible.generator.DefaultImageOperationProvider</implementation>
+        </component>
     </components>
 
     <dependencies>

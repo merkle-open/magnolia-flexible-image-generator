@@ -189,8 +189,9 @@ public class CustomDynamicImageParameter extends DynamicImageParameter {
 </component>
 ```
 #### [ImageOperationProvider](src/main/java/com/merkle/oss/magnolia/imaging/flexible/generator/ImageOperationProvider.java)
+
 ```java
-import com.merkle.oss.magnolia.imaging.flexible.generator.ImageOperationProvider;
+import com.merkle.oss.magnolia.imaging.flexible.generator.DefaultImageOperationProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
@@ -198,11 +199,11 @@ import info.magnolia.imaging.operations.ImageOperationChain;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class CustomImageOperationProvider extends ImageOperationProvider {
+public class CustomImageOperationProvider extends DefaultImageOperationProvider {
 
 	@Override
 	public ImageOperationChain<ParameterProvider<FlexibleParameter>> get(final FlexibleParameter parameter) {
-        final ImageOperationChain<ParameterProvider<FlexibleParameter>> chain = super.get(parameter);
+		final ImageOperationChain<ParameterProvider<FlexibleParameter>> chain = super.get(parameter);
 		if (get(parameter, CustomDynamicImageParameter::isTriggerCustomOperation).orElse(false)) {
 			...
 			chain.addOperation(someCustomOperation);
@@ -218,10 +219,12 @@ public class CustomImageOperationProvider extends ImageOperationProvider {
 	}
 }
 ```
+
 ```xml
+
 <component>
-   <type>com.merkle.oss.magnolia.imaging.flexible.generator.ImageOperationProvider</type>
-   <implementation>com.somepackage.CustomImageOperationProvider</implementation>
+    <type>com.merkle.oss.magnolia.imaging.flexible.generator.ImageOperationProvider</type>
+    <implementation>com.somepackage.CustomImageOperationProvider</implementation>
 </component>
 ```
 

@@ -73,6 +73,7 @@ public class FlexibleParameter extends AssetDecorator {
 				"dynamicImageParameter=" + dynamicImageParameter +
 				", ratio='" + ratio + '\'' +
 				", width=" + width +
+				", fileName=" + getFileName() +
 				"} " + super.toString();
 	}
 
