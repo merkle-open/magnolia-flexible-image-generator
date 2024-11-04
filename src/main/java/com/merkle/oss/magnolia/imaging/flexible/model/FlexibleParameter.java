@@ -5,6 +5,7 @@ import info.magnolia.dam.api.AssetDecorator;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -49,9 +50,21 @@ public class FlexibleParameter extends AssetDecorator {
 				getDynamicImageParameter().stream().map(DynamicImageParameter::toMap).map(Map::entrySet).flatMap(Collection::stream),
 				getRatio().stream().map(ratio -> Map.entry(Factory.RATIO_PARAM, ratio)),
 				Map.of(
-						Factory.WIDTH_PARAM, String.valueOf(getWidth())
+						Factory.WIDTH_PARAM, String.valueOf(getWidth()),
+						Factory.VERSION_PARAM, getVersion()
 				).entrySet().stream()
 		).flatMap(Function.identity()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (dynamicImageParam, flexibleParam) -> flexibleParam));
+	}
+
+	private String getVersion() {
+		Calendar timeStamp = getLastModified();
+		if (timeStamp == null) {
+			timeStamp = getCreated();
+		}
+		if (timeStamp == null) {
+			timeStamp = Calendar.getInstance();
+		}
+		return String.valueOf(timeStamp.toInstant().toEpochMilli());
 	}
 
 	@Override
@@ -80,6 +93,7 @@ public class FlexibleParameter extends AssetDecorator {
 	public static class Factory {
 		public static final String WIDTH_PARAM = "width";
 		public static final String RATIO_PARAM = "ratio";
+		public static final String VERSION_PARAM = "v";
 
 		private final DynamicImageParameter.Factory dynamicImageParameterFactory;
 
