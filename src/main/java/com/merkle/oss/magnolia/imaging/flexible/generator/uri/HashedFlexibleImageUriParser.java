@@ -2,10 +2,10 @@ package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
-import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -32,15 +32,21 @@ public class HashedFlexibleImageUriParser extends FlexibleImageUriParser {
 		this.imageDigest = imageDigest;
 	}
 
-	protected Optional<FlexibleParameter> parse(final String uri, final Asset asset) {
+	@Override
+	public Optional<FlexibleParameter> parse(HttpServletRequest request) {
+		if (!isHashValid(request.getRequestURI())) {
+			return Optional.empty();
+		}
+		return super.parse(request);
+	}
+
+	private boolean isHashValid(final String uri) {
 		final Matcher matcher = HASH_PATH_PARAM_PATTERN.matcher(uri);
-		if(matcher.matches()) {
+		if (matcher.matches()) {
 			final String urlWithoutHashParam = matcher.group(1) + matcher.group(3);
 			final String hashParamValue = matcher.group(2);
-			if(Objects.equals(imageDigest.getMD5Hex(urlWithoutHashParam), hashParamValue)) {
-				return super.parse(uri, asset);
-			}
+			return Objects.equals(imageDigest.getMD5Hex(urlWithoutHashParam), hashParamValue);
 		}
-		return Optional.empty();
+		return false;
 	}
 }
