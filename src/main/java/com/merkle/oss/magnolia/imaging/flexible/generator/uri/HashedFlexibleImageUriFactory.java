@@ -1,12 +1,13 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
-
-import javax.inject.Inject;
 import java.net.URI;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 	private final ImageDigest imageDigest;
@@ -18,7 +19,8 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 
 	/*
 	 * /<context>/.imaging/flex/assetItemKey/hash/hashValue/param1Key/param1Value/.../fileName
-	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/2a2ca0ea6452010c507f67d3e2dbb823//height/316/width/560/dummy1-1600x900.jpg
+	 *
+	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/466cea7f608f4b1b59fee12ff43f7e68/ratio/16:9/version/1733184000000/width/100/someImage.jpg
 	 */
 	public URI create(final FlexibleParameter parameter) {
 		final URI uri = super.create(parameter);
@@ -37,7 +39,7 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 				final FlexibleParameter wrapped,
 				final String hash
 		) {
-			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio().orElse(null), wrapped.getWidth(), wrapped);
+			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio().orElse(null), wrapped.getWidth(), wrapped.getVersion(), wrapped);
 			this.hash = hash;
 		}
 

@@ -1,22 +1,24 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
-import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
 class FlexibleImageUriParserTest {
 	private final Asset asset = mock(Asset.class);
@@ -42,8 +44,8 @@ class FlexibleImageUriParserTest {
 	@Test
 	void parse_valid() {
 		assertEquals(
-				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 560, asset)),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/width/560/dummy1-1600x900.jpg"))
+				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 560, "1733184000000", asset)),
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/width/560/version/1733184000000/dummy1-1600x900.jpg"))
 		);
 	}
 

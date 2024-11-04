@@ -1,23 +1,25 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.api.ItemKey;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.test.mock.jcr.MockNode;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import java.util.Calendar;
 
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
-import java.util.Calendar;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 class FlexibleParameterCachingStrategyTest {
 	private final ImageGenerator<ParameterProvider<FlexibleParameter>> generator = mock(ImageGenerator.class);
@@ -47,7 +49,7 @@ class FlexibleParameterCachingStrategyTest {
 	void getCachePath_noDynamicImageParameter() {
 		assertEquals(
 				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/16%3A9/0",
-				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(null, "16:9", 560, asset))
+				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(null, "16:9", 560, "1733184000000", asset))
 		);
 	}
 
@@ -55,7 +57,7 @@ class FlexibleParameterCachingStrategyTest {
 	void getCachePath_dynamicImageParameter() {
 		assertEquals(
 				"/flex/jcr%3Ab3ee7444-4830-4454-abbb-20fc35387032/560/16%3A9/1268",
-				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(new DynamicImageParameter(false), "16:9", 560, asset))
+				flexibleParameterCachingStrategy.getCachePath(generator, () -> new FlexibleParameter(new DynamicImageParameter(false), "16:9", 560, "1733184000000", asset))
 		);
 	}
 
@@ -63,13 +65,13 @@ class FlexibleParameterCachingStrategyTest {
 	void shouldRegenerate_assetModifiedAfterCachedBinary_shouldRegenerate() throws RepositoryException {
 		cachedBinaryCalendar.set(2023, Calendar.OCTOBER, 26, 14, 30);
 		assetCalendar.set(2023, Calendar.OCTOBER, 26, 14, 31);
-		assertTrue(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, asset)));
+		assertTrue(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, "1733184000000", asset)));
 	}
 
 	@Test
 	void shouldRegenerate_assetModifiedBeforeCachedBinary_shouldNotRegenerate() throws RepositoryException {
 		cachedBinaryCalendar.set(2023, Calendar.OCTOBER, 26, 14, 30);
 		assetCalendar.set(2023, Calendar.OCTOBER, 26, 14, 29);
-		assertFalse(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, asset)));
+		assertFalse(flexibleParameterCachingStrategy.shouldRegenerate(cachedBinary, () -> new FlexibleParameter(null, "16:9", 560, "1733184000000", asset)));
 	}
 }

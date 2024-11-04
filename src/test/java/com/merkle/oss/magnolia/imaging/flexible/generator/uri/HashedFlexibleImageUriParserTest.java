@@ -1,23 +1,26 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
-import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 import info.magnolia.test.TestMagnoliaConfigurationProperties;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
 class HashedFlexibleImageUriParserTest {
 	private final Asset asset = mock(Asset.class);
@@ -51,8 +54,8 @@ class HashedFlexibleImageUriParserTest {
 	@Test
 	void parse_valid() {
 		assertEquals(
-				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 100, asset)),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/1952df994c77d7b92999fef87833207f/ratio/16:9/width/100/someImage.jpg"))
+				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 100, "1733184000000", asset)),
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/fd3dbba63701ecfa3ddbe850741b08b1/ratio/16:9/width/100/version/1733184000000/someImage.jpg"))
 		);
 	}
 
@@ -60,7 +63,7 @@ class HashedFlexibleImageUriParserTest {
 	void parse_invalid_hash() {
 		assertEquals(
 				Optional.empty(),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/INVALID_HASH/ratio/16:9/width/100/someImage.jpg"))
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/INVALID_HASH/ratio/16:9/width/100/version/1733184000000/someImage.jpg"))
 		);
 		verify(damTemplatingFunctions, never()).getAsset(anyString());
 	}
@@ -69,7 +72,7 @@ class HashedFlexibleImageUriParserTest {
 	void parse_invalid_param() {
 		assertEquals(
 				Optional.empty(),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/INVALID/hash/1952df994c77d7b92999fef87833207f/ratio/16:9/width/100/someImage.jpg"))
+				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/INVALID/hash/1952df994c77d7b92999fef87833207f/ratio/16:9/width/100/version/1733184000000/someImage.jpg"))
 		);
 	}
 

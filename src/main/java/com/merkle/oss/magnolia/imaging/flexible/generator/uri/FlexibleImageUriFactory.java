@@ -1,11 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
-import com.machinezoo.noexception.Exceptions;
-import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageGenerator;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.context.MgnlContext;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.net.URI;
 import java.util.Map;
@@ -14,10 +9,17 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
+
+import com.machinezoo.noexception.Exceptions;
+import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageGenerator;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
 public class FlexibleImageUriFactory {
 	/*
 	 * /<context>/.imaging/flex/assetItemKey/param1Key/param1Value/.../fileName
-	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/316/width/560/dummy1-1600x900.jpg
+	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/316/width/560/version/1724145931/dummy1-1600x900.jpg
 	 */
 	public URI create(final FlexibleParameter parameter) {
 		return Exceptions.wrap().get(() ->
