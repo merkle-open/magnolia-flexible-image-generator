@@ -17,16 +17,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class HashedFlexibleImageUriParserTest {
 	private final Asset asset = mock(Asset.class);
 	private FlexibleImageUriParser flexibleImageUriParser;
 
+	private DamTemplatingFunctions damTemplatingFunctions;
+
 	@BeforeEach
 	void setUp() throws IOException {
-		final DamTemplatingFunctions damTemplatingFunctions = mock(DamTemplatingFunctions.class);
+		damTemplatingFunctions = mock(DamTemplatingFunctions.class);
 		doReturn(asset).when(damTemplatingFunctions).getAsset("jcr:b3ee7444-4830-4454-abbb-20fc35387032");
 
 		final ProcessedBundlesProvider processedBundlesProvider = mock(ProcessedBundlesProvider.class);
@@ -61,6 +62,7 @@ class HashedFlexibleImageUriParserTest {
 				Optional.empty(),
 				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/INVALID_HASH/ratio/16:9/width/100/someImage.jpg"))
 		);
+		verify(damTemplatingFunctions, never()).getAsset(anyString());
 	}
 
 	@Test
