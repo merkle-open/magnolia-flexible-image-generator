@@ -23,6 +23,9 @@ if [[ $CURRENT_VERSION == *-6.2-SNAPSHOT ]]; then
 
 	mvn versions:set -DnewVersion=$NEXT_SNAPSHOT versions:commit --no-transfer-progress
 
+  echo "commit new snapshot version"
+  git commit -a -m "Release $NEW_VERSION: set 6.2 to next development version $NEXT_SNAPSHOT"
+
 	git push --all
 	git push --tags
 fi
