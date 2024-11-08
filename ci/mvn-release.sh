@@ -2,10 +2,11 @@
 
 CURRENT_VERSION=`xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml`
 
-if [[ $CURRENT_VERSION == *-6.2 ]]; then
-	NEW_VERSION=${CURRENT_VERSION%'-6.2'}
+if [[ $CURRENT_VERSION == *-6.2-SNAPSHOT ]]; then
+	NEW_VERSION=${CURRENT_VERSION%'-6.2-SNAPSHOT'}
 	NEXT_VERSION=`bash ci/semver.sh -p $NEW_VERSION`
-	NEXT_SNAPSHOT="$NEXT_VERSION-6.2"
+	NEXT_SNAPSHOT="$NEXT_VERSION-6.2-SNAPSHOT"
+	NEW_VERSION="$NEW_VERSION-6.2"
 	echo "perform release of $NEW_VERSION from $CURRENT_VERSION and set next develop version $NEXT_SNAPSHOT"
 
 	mvn versions:set -DnewVersion=$NEW_VERSION versions:commit --no-transfer-progress
