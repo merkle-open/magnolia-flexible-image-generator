@@ -5,7 +5,7 @@
 
 	<groupId>com.namics.oss.magnolia</groupId>
 	<artifactId>magnolia-flexible-image-generator</artifactId>
-	<version>0.0.13-6.2</version>
+	<version>0.0.14-6.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>${project.artifactId}</name>
