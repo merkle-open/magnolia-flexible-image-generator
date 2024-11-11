@@ -20,11 +20,6 @@ if [[ $CURRENT_VERSION == *-SNAPSHOT ]]; then
 	echo "create tag for new release"
 	git tag -a $NEW_VERSION -m "Release $NEW_VERSION: tag release"
 
-	mvn versions:set -DnewVersion=$NEXT_SNAPSHOT versions:commit --no-transfer-progress
-
-	echo "commit new snapshot version"
-	git commit -a -m "Release $NEW_VERSION: set 6.2 to next development version $NEXT_SNAPSHOT"
-
 	git push --all
 	git push --tags
 fi

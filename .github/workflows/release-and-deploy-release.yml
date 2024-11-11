@@ -72,3 +72,16 @@ jobs:
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.OSSRH_USER }}
           nexus_password: ${{ secrets.OSSRH_PASSWORD }}
+      # Install xmllint
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install libxml2-utils
+      # Set git user name and email
+      - name: Set up Git
+        run: |
+          chmod +x ci/setup-git.sh
+          ci/setup-git.sh
+      # Set the next SNAPSHOT version
+      - name: Release (versioning/tag)
+        run: |
+          chmod +x ci/mvn-post-release.sh
+          ci/mvn-post-release.sh
