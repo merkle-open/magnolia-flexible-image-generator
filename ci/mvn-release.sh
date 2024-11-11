@@ -2,11 +2,10 @@
 
 CURRENT_VERSION=`xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml`
 
-if [[ $CURRENT_VERSION == *-6.2-SNAPSHOT ]]; then
-	NEW_VERSION=${CURRENT_VERSION%'-6.2-SNAPSHOT'}
+if [[ $CURRENT_VERSION == *-SNAPSHOT ]]; then
+	NEW_VERSION=${CURRENT_VERSION%'-SNAPSHOT'}
 	NEXT_VERSION=`bash ci/semver.sh -p $NEW_VERSION`
-	NEXT_SNAPSHOT="$NEXT_VERSION-6.2-SNAPSHOT"
-	NEW_VERSION="$NEW_VERSION-6.2"
+	NEXT_SNAPSHOT="$NEXT_VERSION-SNAPSHOT"
 	echo "perform release of $NEW_VERSION from $CURRENT_VERSION and set next develop version $NEXT_SNAPSHOT"
 
 	mvn versions:set -DnewVersion=$NEW_VERSION versions:commit --no-transfer-progress
@@ -23,8 +22,8 @@ if [[ $CURRENT_VERSION == *-6.2-SNAPSHOT ]]; then
 
 	mvn versions:set -DnewVersion=$NEXT_SNAPSHOT versions:commit --no-transfer-progress
 
-  echo "commit new snapshot version"
-  git commit -a -m "Release $NEW_VERSION: set 6.2 to next development version $NEXT_SNAPSHOT"
+	echo "commit new snapshot version"
+	git commit -a -m "Release $NEW_VERSION: set 6.2 to next development version $NEXT_SNAPSHOT"
 
 	git push --all
 	git push --tags
