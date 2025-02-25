@@ -28,6 +28,7 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 			"image/svg+xml",
 			"image/gif"
 	);
+	private static final String FALLBACK_VERSION = "1";
 	private final ProcessedBundlesProvider bundlesProvider;
 	private final FlexibleImageUriFactory flexibleImageUriFactory;
 	private final DamTemplatingFunctions damTemplatingFunctions;
@@ -122,20 +123,17 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 				dynamicImageParameter,
 				size.getRatio().orElse(null),
 				size.getWidth(),
-				String.valueOf(getModificationTime(asset).getEpochSecond()),
+				getModificationTime(asset).map(Instant::getEpochSecond).map(String::valueOf).orElse(FALLBACK_VERSION),
 				asset
 		);
 		return flexibleImageUriFactory.create(parameter).toString();
 	}
 
-	private Instant getModificationTime(final Asset asset) {
+	private Optional<Instant> getModificationTime(final Asset asset) {
 		return Optional
 				.ofNullable(asset.getLastModified())
 				.or(() -> Optional.ofNullable(asset.getCreated()))
-				.map(Calendar::toInstant)
-				.orElseThrow(() ->
-					new NullPointerException("Asset modification time not present! asset:" + asset.getPath())
-				);
+				.map(Calendar::toInstant);
 	}
 
 	private boolean shouldNotGenerateImage(final Asset asset) {
