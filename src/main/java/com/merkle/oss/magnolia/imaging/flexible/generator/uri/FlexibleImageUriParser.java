@@ -1,18 +1,21 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
-import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
 public class FlexibleImageUriParser {
 	/*
@@ -24,17 +27,20 @@ public class FlexibleImageUriParser {
 	private final DamTemplatingFunctions damTemplatingFunctions;
 	private final ProcessedBundlesProvider bundlesProvider;
 	private final FlexibleParameter.Factory flexibleParameterFactory;
+    private final AssetRatioProvider assetRatioProvider;
 
 	@Inject
 	public FlexibleImageUriParser(
-			final DamTemplatingFunctions damTemplatingFunctions,
-			final ProcessedBundlesProvider bundlesProvider,
-			final FlexibleParameter.Factory flexibleParameterFactory
-	) {
+            final DamTemplatingFunctions damTemplatingFunctions,
+            final ProcessedBundlesProvider bundlesProvider,
+            final FlexibleParameter.Factory flexibleParameterFactory,
+            final AssetRatioProvider assetRatioProvider
+    ) {
 		this.damTemplatingFunctions = damTemplatingFunctions;
 		this.bundlesProvider = bundlesProvider;
 		this.flexibleParameterFactory = flexibleParameterFactory;
-	}
+        this.assetRatioProvider = assetRatioProvider;
+    }
 
 	public Optional<FlexibleParameter> parse(final HttpServletRequest request) {
 		final String uri = request.getRequestURI();
@@ -43,7 +49,7 @@ public class FlexibleImageUriParser {
 
 	protected Optional<FlexibleParameter> parse(final String uri, final Asset asset) {
 		return flexibleParameterFactory.create(asset, key -> getParameter(uri, key)).filter(parameter ->
-				isSizeValid(parameter.getWidth(), parameter.getRatio().orElse(null))
+				isSizeValid(parameter.getWidth(), parameter.getRatio(), asset)
 		);
 	}
 
@@ -63,7 +69,7 @@ public class FlexibleImageUriParser {
 				.map(damTemplatingFunctions::getAsset);
 	}
 
-	private boolean isSizeValid(final int width, @Nullable final String ratio) {
+	private boolean isSizeValid(final int width, final String ratio, final Asset asset) {
 		return bundlesProvider.get().stream()
 				.flatMap(bundle ->
 						Stream.concat(
@@ -72,7 +78,12 @@ public class FlexibleImageUriParser {
 						)
 				)
 				.anyMatch(size ->
-						Objects.equals(size.getWidth(), width) && Objects.equals(size.getRatio().orElse(null), ratio)
+						Objects.equals(size.getWidth(), width) && isRatioValid(size, ratio, asset)
 				);
 	}
+
+    private boolean isRatioValid(final ProcessedBundle.ImageSize size, final String actualRatio, final Asset asset) {
+		final String validRatio = size.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
+		return Objects.equals(actualRatio, validRatio);
+    }
 }

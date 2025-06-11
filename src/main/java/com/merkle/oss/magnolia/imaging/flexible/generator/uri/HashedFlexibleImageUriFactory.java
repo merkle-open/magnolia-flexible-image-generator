@@ -45,7 +45,7 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 				final FlexibleParameter wrapped,
 				final String hash
 		) {
-			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio().orElse(null), wrapped.getWidth(), wrapped.getVersion(), wrapped);
+			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio(), wrapped.getWidth(), wrapped.getVersion(), wrapped);
 			this.hash = hash;
 		}
 

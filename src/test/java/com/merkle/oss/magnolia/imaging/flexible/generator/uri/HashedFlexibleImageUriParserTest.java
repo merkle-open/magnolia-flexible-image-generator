@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
@@ -47,7 +48,8 @@ class HashedFlexibleImageUriParserTest {
 				damTemplatingFunctions,
 				processedBundlesProvider,
 				new FlexibleParameter.Factory(new DynamicImageParameter.Factory()),
-				new ImageDigest(new TestMagnoliaConfigurationProperties(ImageDigest.SALT_PROPERTY_KEY, "someSalt"))
+				new ImageDigest(new TestMagnoliaConfigurationProperties(ImageDigest.SALT_PROPERTY_KEY, "someSalt")),
+				new AssetRatioProvider()
 		);
 	}
 

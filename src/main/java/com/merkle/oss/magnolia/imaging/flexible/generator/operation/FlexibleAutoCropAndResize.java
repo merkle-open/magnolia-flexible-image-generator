@@ -1,14 +1,16 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.operation;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.cropresize.resizers.MultiStepResizer;
 
-import javax.inject.Inject;
 import java.awt.image.BufferedImage;
+
+import javax.inject.Inject;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class FlexibleAutoCropAndResize implements ImageOperation<ParameterProvider<FlexibleParameter>> {
 	private final AssetUtil assetUtil;
@@ -32,7 +34,7 @@ public class FlexibleAutoCropAndResize implements ImageOperation<ParameterProvid
 		final AutoCropAndResize autoCropAndResize = new AutoCropAndResize();
 		autoCropAndResize.setResizer(new MultiStepResizer());
 		autoCropAndResize.setTargetWidth(parameter.getWidth());
-		heightCalculator.calculateHeight(parameter).ifPresent(autoCropAndResize::setTargetHeight);
+		autoCropAndResize.setTargetHeight(heightCalculator.calculateHeight(parameter));
 		return autoCropAndResize.apply(source, params);
 	}
 

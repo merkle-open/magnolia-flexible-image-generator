@@ -1,9 +1,10 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 
 public class BundleProcessor {
 	private final RatioParser ratioParser;
@@ -39,9 +40,11 @@ public class BundleProcessor {
 
 	private String validateRatioOrThrow(final String bundleName, @Nullable final String ratio) {
 		if(ratio != null) {
-			ratioParser.parse(ratio).orElseThrow(() ->
-					new IllegalArgumentException("invalid ratio "+ratio+" in bundle "+bundleName)
-			);
+			try {
+				ratioParser.parse(ratio);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("invalid ratio "+ratio+" in bundle "+bundleName, e);
+			};
 		}
 		return ratio;
 	}

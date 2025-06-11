@@ -1,15 +1,18 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.jcr.util.NodeTypes;
-import org.apache.jackrabbit.util.Text;
+
+import java.util.Calendar;
 
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
-import java.util.Calendar;
+
+import org.apache.jackrabbit.util.Text;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class FlexibleParameterCachingStrategy implements CachingStrategy<FlexibleParameter> {
 
@@ -22,7 +25,7 @@ public class FlexibleParameterCachingStrategy implements CachingStrategy<Flexibl
 		return "/" + generator.getName() + "/"
 				+ Text.escapeIllegalJcrChars(parameter.getItemKey().asString()) + "/"
 				+ parameter.getWidth() + "/"
-				+ parameter.getRatio().map(Text::escapeIllegalJcrChars).orElse("keepRatio") + "/"
+				+ Text.escapeIllegalJcrChars(parameter.getRatio()) + "/"
 				+ parameter.getDynamicImageParameter().hashCode();
 	}
 
