@@ -132,9 +132,8 @@ public class ImageModel {
 
 		@Override
 		public boolean equals(Object o) {
-			if (!(o instanceof Rendition rendition)) {
-				return false;
-			}
+			if (o == null || getClass() != o.getClass()) return false;
+			Rendition rendition = (Rendition) o;
 			return width == rendition.width && height == rendition.height && Double.compare(ratio, rendition.ratio) == 0 && Objects.equals(media, rendition.media) && Objects.equals(src, rendition.src);
 		}
 

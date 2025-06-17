@@ -64,9 +64,8 @@ public class FlexibleParameter extends AssetDecorator {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof FlexibleParameter that)) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
+        FlexibleParameter that = (FlexibleParameter) o;
         return width == that.width && Objects.equals(dynamicImageParameter, that.dynamicImageParameter) && Objects.equals(version, that.version) && Objects.equals(ratio, that.ratio);
     }
 
