@@ -1,24 +1,33 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 public class BundlesParser {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -50,7 +59,7 @@ public class BundlesParser {
 
 	private Stream<Bundle> create(final String bundlesDirName, final String path) {
 		try {
-			final String filePattern = "**" + path + "/**/" + bundlesDirName + "/*.json";
+			final String filePattern = "**" + bundlesDirName + "/*.json";
 			LOG.info("Load image bundle definitions which match pattern '{}'", filePattern);
 			final Stream.Builder<Stream<Bundle>> bundles = Stream.builder();
 

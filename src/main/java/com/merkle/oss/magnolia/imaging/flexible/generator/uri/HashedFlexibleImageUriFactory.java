@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.servlet.ServletContext;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
@@ -13,8 +15,12 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 	private final ImageDigest imageDigest;
 
 	@Inject
-	public HashedFlexibleImageUriFactory(final ImageDigest imageDigest) {
-		this.imageDigest = imageDigest;
+	public HashedFlexibleImageUriFactory(
+			final Provider<ServletContext> servletContext,
+			final ImageDigest imageDigest
+	) {
+        super(servletContext);
+        this.imageDigest = imageDigest;
 	}
 
 	/*
@@ -39,7 +45,7 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 				final FlexibleParameter wrapped,
 				final String hash
 		) {
-			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio().orElse(null), wrapped.getWidth(), wrapped.getVersion(), wrapped);
+			super(wrapped.getDynamicImageParameter().orElse(null), wrapped.getRatio(), wrapped.getWidth(), wrapped.getVersion(), wrapped);
 			this.hash = hash;
 		}
 

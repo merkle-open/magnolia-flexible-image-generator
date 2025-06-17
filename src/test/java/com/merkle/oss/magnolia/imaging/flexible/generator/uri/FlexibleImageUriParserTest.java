@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
@@ -38,7 +39,7 @@ class FlexibleImageUriParserTest {
 		doReturn(Collections.emptyList()).when(processedBundle).getCustomRenditions();
 		doReturn(List.of(processedBundle)).when(processedBundlesProvider).get();
 
-		flexibleImageUriParser = new FlexibleImageUriParser(damTemplatingFunctions, processedBundlesProvider, new FlexibleParameter.Factory(new DynamicImageParameter.Factory()));
+		flexibleImageUriParser = new FlexibleImageUriParser(damTemplatingFunctions, processedBundlesProvider, new FlexibleParameter.Factory(new DynamicImageParameter.Factory()), new AssetRatioProvider());
 	}
 
 	@Test

@@ -5,6 +5,8 @@ import info.magnolia.dam.api.AssetProviderRegistry;
 import info.magnolia.dam.api.ItemKey;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,17 +24,22 @@ import org.jetbrains.annotations.Nullable;
 import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriFactory;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
+import com.merkle.oss.magnolia.imaging.flexible.model.bundle.RatioParser;
 
 public class AssetImageModelFactory implements ImageModel.Factory {
 	private static final Set<String> EXCLUDE_FROM_GENERATION_MIME_TYPES = Set.of(
 			"image/svg+xml",
 			"image/gif"
 	);
+	private static final String FALLBACK_VERSION = "1";
+
 	private final ProcessedBundlesProvider bundlesProvider;
 	private final FlexibleImageUriFactory flexibleImageUriFactory;
 	private final DamTemplatingFunctions damTemplatingFunctions;
 	private final AssetProviderRegistry assetProviderRegistry;
 	private final LocalizedAsset.Factory localizedAssetFactory;
+	private final RatioParser ratioParser;
+	private final AssetRatioProvider assetRatioProvider;
 
 	@Inject
 	public AssetImageModelFactory(
@@ -40,13 +47,17 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 			final FlexibleImageUriFactory flexibleImageUriFactory,
 			final DamTemplatingFunctions damTemplatingFunctions,
 			final AssetProviderRegistry assetProviderRegistry,
-			final LocalizedAsset.Factory localizedAssetFactory
+			final LocalizedAsset.Factory localizedAssetFactory,
+			final RatioParser ratioParser,
+			final AssetRatioProvider assetRatioProvider
 	) {
 		this.bundlesProvider = bundlesProvider;
 		this.flexibleImageUriFactory = flexibleImageUriFactory;
 		this.damTemplatingFunctions = damTemplatingFunctions;
 		this.assetProviderRegistry = assetProviderRegistry;
 		this.localizedAssetFactory = localizedAssetFactory;
+		this.ratioParser = ratioParser;
+		this.assetRatioProvider = assetRatioProvider;
 	}
 
 	@Override
@@ -98,10 +109,24 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 		}
 		return bundle.getImageSizes()
 				.stream()
-				.map(size ->
-						new ImageModel.Rendition(size.getId(), getUrl(size, asset, dynamicImageParameter))
-				)
+				.map(size -> getRendition(size, asset, dynamicImageParameter))
 				.collect(Collectors.toList());
+	}
+
+	private ImageModel.Rendition getRendition(final ProcessedBundle.ImageSize size, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
+		final String ratio = size.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
+		final double parsedRatio = ratioParser.parse(ratio);
+		return new ImageModel.Rendition(
+				size.getId(),
+				getUrl(asset, size.getWidth(), ratio, dynamicImageParameter),
+				size.getWidth(),
+				calculateHeight(size.getWidth(), parsedRatio),
+				parsedRatio
+		);
+	}
+
+	private int calculateHeight(final long width, final double ratio) {
+		return BigDecimal.valueOf(width / ratio).setScale(0, RoundingMode.UP).intValue();
 	}
 
 	private Map<String, String> getCustomRenditions(final ProcessedBundle bundle, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
@@ -112,30 +137,30 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 				.stream()
 				.collect(Collectors.toUnmodifiableMap(
 						ProcessedBundle.ImageSize::getId,
-						rendition -> getUrl(rendition, asset, dynamicImageParameter),
+						rendition -> {
+							final String ratio = rendition.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
+							return getUrl(asset, rendition.getWidth(), ratio, dynamicImageParameter);
+						},
 						(r1, r2) -> r1 // merge function: if there is a duplicate definition use the first one
 				));
 	}
 
-	private String getUrl(final ProcessedBundle.ImageSize size, final Asset asset, @Nullable final DynamicImageParameter dynamicImageParameter) {
+	private String getUrl(final Asset asset, final int width, final String ratio, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		final FlexibleParameter parameter = new FlexibleParameter(
 				dynamicImageParameter,
-				size.getRatio().orElse(null),
-				size.getWidth(),
-				String.valueOf(getModificationTime(asset).getEpochSecond()),
+				ratio,
+				width,
+				getModificationTime(asset).map(Instant::getEpochSecond).map(String::valueOf).orElse(FALLBACK_VERSION),
 				asset
 		);
 		return flexibleImageUriFactory.create(parameter).toString();
 	}
 
-	private Instant getModificationTime(final Asset asset) {
+	private Optional<Instant> getModificationTime(final Asset asset) {
 		return Optional
 				.ofNullable(asset.getLastModified())
 				.or(() -> Optional.ofNullable(asset.getCreated()))
-				.map(Calendar::toInstant)
-				.orElseThrow(() ->
-					new NullPointerException("Asset modification time not present! asset:" + asset.getPath())
-				);
+				.map(Calendar::toInstant);
 	}
 
 	private boolean shouldNotGenerateImage(final Asset asset) {
