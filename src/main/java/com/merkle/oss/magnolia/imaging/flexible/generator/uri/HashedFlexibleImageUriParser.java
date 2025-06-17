@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
@@ -28,9 +29,10 @@ public class HashedFlexibleImageUriParser extends FlexibleImageUriParser {
 			final DamTemplatingFunctions damTemplatingFunctions,
 			final ProcessedBundlesProvider bundlesProvider,
 			final FlexibleParameter.Factory flexibleParameterFactory,
-			final ImageDigest imageDigest
+			final ImageDigest imageDigest,
+			final AssetRatioProvider assetRatioProvider
 	) {
-		super(damTemplatingFunctions, bundlesProvider, flexibleParameterFactory);
+		super(damTemplatingFunctions, bundlesProvider, flexibleParameterFactory, assetRatioProvider);
 		this.imageDigest = imageDigest;
 	}
 

@@ -1,14 +1,16 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.operation;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.operations.cropresize.BoundedResize;
 import info.magnolia.imaging.operations.cropresize.resizers.MultiStepResizer;
 
-import javax.inject.Inject;
 import java.awt.image.BufferedImage;
+
+import javax.inject.Inject;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class FlexibleBoundedResize implements ImageOperation<ParameterProvider<FlexibleParameter>> {
 	private final AssetUtil assetUtil;
@@ -32,7 +34,7 @@ public class FlexibleBoundedResize implements ImageOperation<ParameterProvider<F
 		final BoundedResize boundedResize = new BoundedResize();
 		boundedResize.setResizer(new MultiStepResizer());
 		boundedResize.setMaxWidth(parameter.getWidth());
-		boundedResize.setMaxHeight(heightCalculator.calculateHeight(parameter).orElse(Integer.MAX_VALUE));
+		boundedResize.setMaxHeight(heightCalculator.calculateHeight(parameter));
 		return boundedResize.apply(source, params);
 	}
 

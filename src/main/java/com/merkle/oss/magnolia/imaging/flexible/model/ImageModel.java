@@ -1,7 +1,12 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import javax.annotation.Nullable;
-import java.util.*;
 
 public class ImageModel {
 	private final String alt;
@@ -87,13 +92,22 @@ public class ImageModel {
 	public static class Rendition {
 		private final String media;
 		private final String src;
+		private final int width;
+		private final int height;
+		private final double ratio;
 
 		public Rendition(
 				final String media,
-				final String src
+				final String src,
+				final int width,
+				final int height,
+				final double ratio
 		) {
 			this.media = media;
 			this.src = src;
+			this.width = width;
+			this.height = height;
+			this.ratio = ratio;
 		}
 
 		public String getMedia() {
@@ -104,17 +118,29 @@ public class ImageModel {
 			return src;
 		}
 
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public double getRatio() {
+			return ratio;
+		}
+
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			Rendition rendition = (Rendition) o;
-			return Objects.equals(media, rendition.media) && Objects.equals(src, rendition.src);
+			if (!(o instanceof Rendition rendition)) {
+				return false;
+			}
+			return width == rendition.width && height == rendition.height && Double.compare(ratio, rendition.ratio) == 0 && Objects.equals(media, rendition.media) && Objects.equals(src, rendition.src);
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(media, src);
+			return Objects.hash(media, src, width, height, ratio);
 		}
 
 		@Override
@@ -122,6 +148,9 @@ public class ImageModel {
 			return "Rendition{" +
 					"media='" + media + '\'' +
 					", src='" + src + '\'' +
+					", width=" + width +
+					", height=" + height +
+					", ratio=" + ratio +
 					'}';
 		}
 	}
@@ -133,6 +162,7 @@ public class ImageModel {
 		default Optional<ImageModel> create(Locale locale, String assetId, String bundleName) {
 			return create(locale, assetId, bundleName, null);
 		}
+
 		Optional<ImageModel> create(Locale locale, String assetId, String bundleName, @Nullable DynamicImageParameter dynamicImageParameter);
 	}
 }
