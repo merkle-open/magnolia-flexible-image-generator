@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.servlet.ServletContext;
-
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.servlet.ServletContext;
 
 public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 	private final ImageDigest imageDigest;

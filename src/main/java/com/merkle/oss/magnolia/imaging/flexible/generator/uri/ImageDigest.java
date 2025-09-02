@@ -1,12 +1,14 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 
 import info.magnolia.init.MagnoliaConfigurationProperties;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
 import java.security.MessageDigest;
 import java.util.Optional;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 public class ImageDigest {
 	static final String SALT_PROPERTY_KEY = "com.merkle.oss.magnolia.imaging.flexible.generator.uri.hash.salt";

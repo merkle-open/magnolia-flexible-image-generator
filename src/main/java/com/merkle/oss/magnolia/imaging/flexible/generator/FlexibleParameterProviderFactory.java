@@ -4,8 +4,11 @@ import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import info.magnolia.imaging.caching.CachingStrategy;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;

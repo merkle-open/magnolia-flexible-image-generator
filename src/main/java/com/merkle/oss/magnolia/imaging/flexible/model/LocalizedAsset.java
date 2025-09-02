@@ -1,16 +1,19 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import com.merkle.oss.magnolia.imaging.flexible.util.LocalizedPropertyNameProvider;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.api.AssetDecorator;
 import info.magnolia.dam.jcr.AbstractJcrItem;
 import info.magnolia.dam.jcr.AssetNodeTypes;
 import info.magnolia.jcr.util.PropertyUtil;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.merkle.oss.magnolia.imaging.flexible.util.LocalizedPropertyNameProvider;
+
+import jakarta.inject.Inject;
 
 public class LocalizedAsset extends AssetDecorator {
 	private final String title;

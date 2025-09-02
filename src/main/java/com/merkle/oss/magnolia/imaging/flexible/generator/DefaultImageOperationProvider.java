@@ -1,15 +1,16 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
+import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.operations.ImageOperationChain;
+
 import com.merkle.oss.magnolia.imaging.flexible.generator.operation.FlexibleAutoCropAndResize;
 import com.merkle.oss.magnolia.imaging.flexible.generator.operation.FlexibleBoundedResize;
 import com.merkle.oss.magnolia.imaging.flexible.generator.operation.FromFlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
-import info.magnolia.imaging.ParameterProvider;
-import info.magnolia.imaging.operations.ImageOperationChain;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 public class DefaultImageOperationProvider implements ImageOperationProvider {
 	private final Provider<FromFlexibleParameter> fromFlexibleParameter;

@@ -13,7 +13,6 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
@@ -83,7 +82,7 @@ public class BundlesParser {
 
 	private void processResource(final URI uri, final IOConsumer<Path> consumer) throws IOException {
 		try {
-			consumer.accept(Paths.get(uri));
+			consumer.accept(Path.of(uri));
 		} catch(FileSystemNotFoundException ex) {
 			try(final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
 				consumer.accept(fs.provider().getPath(uri));

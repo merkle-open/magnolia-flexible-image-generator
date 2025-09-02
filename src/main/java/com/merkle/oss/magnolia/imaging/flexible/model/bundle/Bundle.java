@@ -1,11 +1,12 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import com.google.gson.annotations.SerializedName;
-
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import com.google.gson.annotations.SerializedName;
+
+import jakarta.annotation.Nullable;
 
 class Bundle {
 	@SerializedName("bundle")

@@ -17,14 +17,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriFactory;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.RatioParser;
+
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 public class AssetImageModelFactory implements ImageModel.Factory {
 	private static final Set<String> EXCLUDE_FROM_GENERATION_MIME_TYPES = Set.of(

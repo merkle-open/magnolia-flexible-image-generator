@@ -2,10 +2,12 @@ package com.merkle.oss.magnolia.imaging.flexible.util;
 
 import info.magnolia.cms.i18n.I18nContentSupport;
 
-import javax.inject.Inject;
-import javax.jcr.Node;
 import java.util.Locale;
 import java.util.Objects;
+
+import javax.jcr.Node;
+
+import jakarta.inject.Inject;
 
 public class DefaultLocalizedPropertyNameProvider implements LocalizedPropertyNameProvider {
 	private final I18nContentSupport i18nContentSupport;

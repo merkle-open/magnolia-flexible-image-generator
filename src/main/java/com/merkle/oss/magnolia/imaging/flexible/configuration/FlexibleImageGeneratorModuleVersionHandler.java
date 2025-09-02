@@ -5,8 +5,9 @@ import info.magnolia.module.InstallContext;
 import info.magnolia.module.delta.Task;
 import info.magnolia.module.model.Version;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import jakarta.inject.Inject;
 
 public class FlexibleImageGeneratorModuleVersionHandler extends DefaultModuleVersionHandler {
 	private final InstallFlexibleImageGenerator installFlexibleImageGenerator;
