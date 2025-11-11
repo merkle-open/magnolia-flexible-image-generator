@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
@@ -42,10 +41,9 @@ public class FlexibleImageUriParser {
         this.assetRatioProvider = assetRatioProvider;
     }
 
-	public Optional<FlexibleParameter> parse(final HttpServletRequest request) {
-		final String uri = request.getRequestURI();
-		return getAsset(uri).flatMap(asset -> parse(uri, asset));
-	}
+    public Optional<FlexibleParameter> parse(final String uri) {
+        return getAsset(uri).flatMap(asset -> parse(uri, asset));
+    }
 
 	protected Optional<FlexibleParameter> parse(final String uri, final Asset asset) {
 		return flexibleParameterFactory.create(asset, key -> getParameter(uri, key)).filter(parameter ->

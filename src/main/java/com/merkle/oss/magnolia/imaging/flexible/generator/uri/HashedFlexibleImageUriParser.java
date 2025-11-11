@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
@@ -37,11 +36,11 @@ public class HashedFlexibleImageUriParser extends FlexibleImageUriParser {
 	}
 
 	@Override
-	public Optional<FlexibleParameter> parse(final HttpServletRequest request) {
-		if (!isHashValid(request.getRequestURI())) {
+	public Optional<FlexibleParameter> parse(final String uri) {
+		if (!isHashValid(uri)) {
 			return Optional.empty();
 		}
-		return super.parse(request);
+		return super.parse(uri);
 	}
 
 	protected boolean isHashValid(final String uri) {

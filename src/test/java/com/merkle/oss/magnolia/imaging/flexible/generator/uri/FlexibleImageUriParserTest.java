@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +44,7 @@ class FlexibleImageUriParserTest {
 	void parse_valid() {
 		assertEquals(
 				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 560, "1733184000000", asset)),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/width/560/version/1733184000000/dummy1-1600x900.jpg"))
+				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/width/560/version/1733184000000/dummy1-1600x900.jpg")
 		);
 	}
 
@@ -54,13 +52,7 @@ class FlexibleImageUriParserTest {
 	void parse_invalid() {
 		assertEquals(
 				Optional.empty(),
-				flexibleImageUriParser.parse(createRequest("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:10/width/560/dummy1-1600x900.jpg"))
+				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:10/width/560/dummy1-1600x900.jpg")
 		);
-	}
-
-	private HttpServletRequest createRequest(final String uri) {
-		final HttpServletRequest request = mock(HttpServletRequest.class);
-		doReturn(uri).when(request).getRequestURI();
-		return request;
 	}
 }

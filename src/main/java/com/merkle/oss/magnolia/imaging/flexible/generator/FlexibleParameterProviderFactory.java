@@ -1,13 +1,14 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import info.magnolia.imaging.caching.CachingStrategy;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+
+import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class FlexibleParameterProviderFactory implements ParameterProviderFactory<HttpServletRequest, FlexibleParameter> {
 	private final FlexibleImageUriParser flexibleImageUriParser;
@@ -24,7 +25,7 @@ public class FlexibleParameterProviderFactory implements ParameterProviderFactor
 
 	@Override
 	public ParameterProvider<FlexibleParameter> newParameterProviderFor(final HttpServletRequest request) {
-		return () -> flexibleImageUriParser.parse(request).orElseThrow(() ->
+		return () -> flexibleImageUriParser.parse(request.getRequestURI()).orElseThrow(() ->
 				new IllegalArgumentException("Failed to parse flexible parameter from " + request.getRequestURI()+" - "+request.getQueryString())
 		);
 	}
