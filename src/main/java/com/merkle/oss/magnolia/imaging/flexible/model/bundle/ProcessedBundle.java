@@ -1,9 +1,10 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import jakarta.annotation.Nullable;
 
 public class ProcessedBundle {
 	private final String name;

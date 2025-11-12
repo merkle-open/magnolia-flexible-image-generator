@@ -1,14 +1,15 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
-import com.merkle.oss.magnolia.imaging.flexible.FlexibleImageGeneratorModule;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.merkle.oss.magnolia.imaging.flexible.FlexibleImageGeneratorModule;
+
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
 
 @Singleton
 public class ProcessedBundlesProvider implements Provider<List<ProcessedBundle>> {

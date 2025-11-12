@@ -21,6 +21,8 @@ import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 class HashedFlexibleImageUriParserTest {
 	private final Asset asset = mock(Asset.class);
 	private FlexibleImageUriParser flexibleImageUriParser;

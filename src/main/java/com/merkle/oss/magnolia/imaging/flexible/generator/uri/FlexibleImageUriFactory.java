@@ -7,16 +7,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.servlet.ServletContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 
 import com.machinezoo.noexception.Exceptions;
 import com.merkle.oss.magnolia.imaging.flexible.generator.FlexibleImageGenerator;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.servlet.ServletContext;
 
 public class FlexibleImageUriFactory {
     private final Provider<ServletContext> servletContext;

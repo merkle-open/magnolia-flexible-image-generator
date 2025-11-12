@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ImageModel {
 	private final String alt;

@@ -1,11 +1,12 @@
 package com.merkle.oss.magnolia.imaging.flexible.model;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 public class CombinedImageModelFactory implements ImageModel.Factory {
 	private final Collection<ImageModel.Factory> factories;
@@ -20,8 +21,7 @@ public class CombinedImageModelFactory implements ImageModel.Factory {
 		return factories
 				.stream()
 				.map(factory -> factory.create(locale, assetId, bundleName, dynamicImageParameter))
-				.filter(Optional::isPresent)
-				.map(Optional::get)
+				.flatMap(Optional::stream)
 				.findFirst();
 	}
 }

@@ -1,14 +1,16 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator.operation;
 
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.load.AbstractLoader;
 
-import javax.inject.Inject;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
 
 public class FromFlexibleParameter extends AbstractLoader<ParameterProvider<FlexibleParameter>> {
 	private final AssetUtil assetUtil;

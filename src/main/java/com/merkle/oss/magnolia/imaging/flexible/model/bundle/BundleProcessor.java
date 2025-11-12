@@ -3,8 +3,8 @@ package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 public class BundleProcessor {
 	private final RatioParser ratioParser;

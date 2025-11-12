@@ -3,10 +3,10 @@ package com.merkle.oss.magnolia.imaging.flexible.generator.operation;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import javax.inject.Inject;
-
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.RatioParser;
+
+import jakarta.inject.Inject;
 
 public class HeightCalculator {
 	private final RatioParser ratioParser;

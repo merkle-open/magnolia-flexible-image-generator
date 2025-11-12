@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.servlet.ServletContext;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.DynamicImageParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.servlet.ServletContext;
 
 class HashedFlexibleImageUriFactoryTest {
 	private HashedFlexibleImageUriFactory uriFactory;

@@ -8,9 +8,9 @@ import info.magnolia.imaging.operations.cropresize.resizers.MultiStepResizer;
 
 import java.awt.image.BufferedImage;
 
-import javax.inject.Inject;
-
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
 
 public class FlexibleBoundedResize implements ImageOperation<ParameterProvider<FlexibleParameter>> {
 	private final AssetUtil assetUtil;

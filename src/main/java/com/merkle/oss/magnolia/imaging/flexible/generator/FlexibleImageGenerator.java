@@ -1,18 +1,22 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
-import com.machinezoo.noexception.Exceptions;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.imageio.ImageIO;
-import javax.inject.Inject;
-import java.awt.image.BufferedImage;
+import com.machinezoo.noexception.Exceptions;
+import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
+
+import jakarta.inject.Inject;
 
 public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvider<FlexibleParameter>> {
 	public static final String GENERATOR_NAME = "flex";
