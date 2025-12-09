@@ -7,15 +7,20 @@ import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
 
 import java.awt.image.BufferedImage;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypes;
 
 import com.machinezoo.noexception.Exceptions;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 
 public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvider<FlexibleParameter>> {
@@ -43,12 +48,13 @@ public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvide
 		final FlexibleParameter flexibleParameter = params.getParameter();
 		try {
 			final OutputFormat format = getOutputFormat().clone();
-			final String extension = FilenameUtils.getExtension(flexibleParameter.getFileName());
-			format.setFormatName(extension);
+            @Nullable
+			final String extension = getExtension(flexibleParameter).orElse(null);
+            Optional.ofNullable(extension).ifPresent(format::setFormatName);
 
-			if ("gif".equals(StringUtils.lowerCase(extension))) {
+			if (Strings.CI.equals("gif", extension)) {
 				format.setCompressionType("LZW");
-			} else if ("png".equalsIgnoreCase(extension)) {
+			} else if (Strings.CI.equals("png", extension)) {
 				format.setQuality(estimatePngQuality(flexibleParameter));
 			} else {
 				format.setCompressionType(null);
@@ -58,6 +64,29 @@ public class FlexibleImageGenerator extends ImageOperationChain<ParameterProvide
 			throw new RuntimeException("Can't clone the output format to produce a dynamic format.", e);
 		}
 	}
+
+    private Optional<String> getExtension(final FlexibleParameter flexibleParameter) {
+        return getExtensionFromFilename(flexibleParameter).or(() ->
+                getExtensionFromMimeType(flexibleParameter)
+        );
+    }
+
+    private Optional<String> getExtensionFromFilename(final FlexibleParameter flexibleParameter) {
+        return Optional
+                .of(FilenameUtils.getExtension(flexibleParameter.getFileName()))
+                .filter(Predicate.not(String::isEmpty));
+    }
+
+    private Optional<String> getExtensionFromMimeType(final FlexibleParameter flexibleParameter) {
+        try {
+            final MimeType mimeType = MimeTypes.getDefaultMimeTypes().forName(flexibleParameter.getMimeType());
+            return Optional
+                    .of(mimeType.getExtension())
+                    .map(extension -> extension.replaceFirst("\\.", ""));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
 	public int estimatePngQuality(final Asset asset) {
 		final long binarySize = asset.getFileSize();
