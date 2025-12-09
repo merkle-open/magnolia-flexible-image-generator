@@ -2,6 +2,7 @@ package com.merkle.oss.magnolia.imaging.flexible.model;
 
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.api.AssetDecorator;
+import info.magnolia.dam.binary.api.BinaryReference;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,6 +34,12 @@ public class FlexibleParameter extends AssetDecorator {
         this.width = width;
         this.dynamicImageParameter = dynamicImageParameter;
         this.version = version;
+    }
+
+    // magnolia missed this in assetDecorator
+    @Override
+    public BinaryReference getBinaryReference() {
+        return getDecorated().getBinaryReference();
     }
 
     public Optional<DynamicImageParameter> getDynamicImageParameter() {

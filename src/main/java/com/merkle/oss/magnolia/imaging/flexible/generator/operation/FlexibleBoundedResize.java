@@ -13,36 +13,20 @@ import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import jakarta.inject.Inject;
 
 public class FlexibleBoundedResize implements ImageOperation<ParameterProvider<FlexibleParameter>> {
-	private final AssetUtil assetUtil;
 	private final HeightCalculator heightCalculator;
 
 	@Inject
-	public FlexibleBoundedResize(
-			final AssetUtil assetUtil,
-			final HeightCalculator heightCalculator
-	) {
-		this.assetUtil = assetUtil;
+	public FlexibleBoundedResize(final HeightCalculator heightCalculator) {
 		this.heightCalculator = heightCalculator;
 	}
 
 	@Override
 	public BufferedImage apply(final BufferedImage source, final ParameterProvider<FlexibleParameter> params) throws ImagingException {
 		final FlexibleParameter parameter = params.getParameter();
-		if (!isSupported(parameter)) {
-			throw new ImagingException(getClass() + " doesn't support " + parameter);
-		}
 		final BoundedResize boundedResize = new BoundedResize();
 		boundedResize.setResizer(new MultiStepResizer());
 		boundedResize.setMaxWidth(parameter.getWidth());
 		boundedResize.setMaxHeight(heightCalculator.calculateHeight(parameter));
 		return boundedResize.apply(source, params);
-	}
-
-	public boolean isSupported(final FlexibleParameter parameter) {
-		try {
-			return !assetUtil.isAnimated(parameter);
-		} catch (Exception e) {
-			return false;
-		}
 	}
 }

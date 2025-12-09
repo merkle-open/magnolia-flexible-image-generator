@@ -13,36 +13,20 @@ import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import jakarta.inject.Inject;
 
 public class FlexibleAutoCropAndResize implements ImageOperation<ParameterProvider<FlexibleParameter>> {
-	private final AssetUtil assetUtil;
 	private final HeightCalculator heightCalculator;
 
 	@Inject
-	public FlexibleAutoCropAndResize(
-			final AssetUtil assetUtil,
-			final HeightCalculator heightCalculator
-	) {
-		this.assetUtil = assetUtil;
+	public FlexibleAutoCropAndResize(final HeightCalculator heightCalculator) {
 		this.heightCalculator = heightCalculator;
 	}
 
 	@Override
 	public BufferedImage apply(final BufferedImage source, final ParameterProvider<FlexibleParameter> params) throws ImagingException {
 		final FlexibleParameter parameter = params.getParameter();
-		if (!isSupported(parameter)) {
-			throw new ImagingException(getClass() + " doesn't support " + parameter);
-		}
 		final AutoCropAndResize autoCropAndResize = new AutoCropAndResize();
 		autoCropAndResize.setResizer(new MultiStepResizer());
 		autoCropAndResize.setTargetWidth(parameter.getWidth());
 		autoCropAndResize.setTargetHeight(heightCalculator.calculateHeight(parameter));
 		return autoCropAndResize.apply(source, params);
-	}
-
-	public boolean isSupported(final FlexibleParameter parameter) {
-		try {
-			return !assetUtil.isAnimated(parameter);
-		} catch (Exception e) {
-			return false;
-		}
 	}
 }

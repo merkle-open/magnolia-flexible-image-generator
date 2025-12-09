@@ -1,17 +1,18 @@
 package com.merkle.oss.magnolia.imaging.flexible.generator;
 
+import info.magnolia.dam.api.AssetDecorator;
+import info.magnolia.dam.api.ItemKey;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import info.magnolia.imaging.caching.CachingStrategy;
+
+import java.util.Optional;
 
 import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
-
-import com.merkle.oss.magnolia.imaging.flexible.generator.uri.FlexibleImageUriParser;
-import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 
 public class FlexibleParameterProviderFactory implements ParameterProviderFactory<HttpServletRequest, FlexibleParameter> {
 	private final FlexibleImageUriParser flexibleImageUriParser;
@@ -28,8 +29,17 @@ public class FlexibleParameterProviderFactory implements ParameterProviderFactor
 
 	@Override
 	public ParameterProvider<FlexibleParameter> newParameterProviderFor(final HttpServletRequest request) {
-		return () -> flexibleImageUriParser.parse(request.getRequestURI()).orElseThrow(() ->
-				new IllegalArgumentException("Failed to parse flexible parameter from " + request.getRequestURI()+" - "+request.getQueryString())
-		);
+		return new ParameterProvider<>() {
+            @Override
+            public FlexibleParameter getParameter() {
+                return flexibleImageUriParser.parse(request.getRequestURI()).orElseThrow(() ->
+                        new IllegalArgumentException("Failed to parse flexible parameter from " + request.getRequestURI()+" - "+request.getQueryString())
+                );
+            }
+            @Override
+            public Optional<String> getAssetNodeId() {
+                return flexibleImageUriParser.parse(request.getRequestURI()).map(AssetDecorator::getItemKey).map(ItemKey::getAssetId);
+            }
+        };
 	}
 }
