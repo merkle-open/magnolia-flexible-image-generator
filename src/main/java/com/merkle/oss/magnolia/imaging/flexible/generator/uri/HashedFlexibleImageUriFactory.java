@@ -33,7 +33,7 @@ public class HashedFlexibleImageUriFactory extends FlexibleImageUriFactory {
 
 		return super.create(new HashedFlexibleParameter(
 				parameter,
-				imageDigest.getMD5Hex(uri.toString())
+				imageDigest.getHash(uri.toString())
 		));
 	}
 
