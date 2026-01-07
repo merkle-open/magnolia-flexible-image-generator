@@ -4,6 +4,8 @@ import info.magnolia.init.MagnoliaConfigurationProperties;
 
 import java.util.Optional;
 
+import com.merkle.oss.magnolia.imaging.flexible.util.Lazy;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
@@ -13,10 +15,10 @@ public class ImageDigest {
 
 	@Inject
 	public ImageDigest(final MagnoliaConfigurationProperties properties) {
-		this.saltProvider = () ->
+		this.saltProvider = Lazy.of(() ->
 			Optional.ofNullable(properties.getProperty(SALT_PROPERTY_KEY)).orElseThrow(() ->
 					new NullPointerException("salt not configured! Set " + SALT_PROPERTY_KEY + " in magnolia.properties")
-			);
+			))::get;
 	}
 
 	public String getHash(final String input) {
