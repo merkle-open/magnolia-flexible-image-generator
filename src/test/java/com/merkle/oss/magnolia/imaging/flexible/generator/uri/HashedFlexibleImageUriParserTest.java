@@ -55,7 +55,7 @@ class HashedFlexibleImageUriParserTest {
 	void parse_valid() {
 		assertEquals(
 				Optional.of(new FlexibleParameter(new DynamicImageParameter(true), "16:9", 100, "1733184000000", asset)),
-				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/fd3dbba63701ecfa3ddbe850741b08b1/ratio/16:9/width/100/version/1733184000000/someImage.jpg")
+				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/hash/168818088/ratio/16:9/version/1733184000000/width/100/someImage.jpg")
 		);
 	}
 
@@ -72,7 +72,7 @@ class HashedFlexibleImageUriParserTest {
 	void parse_invalid_param() {
 		assertEquals(
 				Optional.empty(),
-				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/INVALID/hash/1952df994c77d7b92999fef87833207f/ratio/16:9/width/100/version/1733184000000/someImage.jpg")
+				flexibleImageUriParser.parse("/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/INVALID/hash/168818088/ratio/16:9/version/1733184000000/width/100/someImage.jpg")
 		);
 	}
 }
