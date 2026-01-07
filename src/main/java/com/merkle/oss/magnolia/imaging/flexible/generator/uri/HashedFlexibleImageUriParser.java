@@ -14,7 +14,6 @@ import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 
 public class HashedFlexibleImageUriParser extends FlexibleImageUriParser {
 	/*
@@ -49,7 +48,7 @@ public class HashedFlexibleImageUriParser extends FlexibleImageUriParser {
 		if (matcher.matches()) {
 			final String urlWithoutHashParam = matcher.group(1) + matcher.group(3);
 			final String hashParamValue = matcher.group(2);
-			return Objects.equals(imageDigest.getMD5Hex(urlWithoutHashParam), hashParamValue);
+			return Objects.equals(imageDigest.getHash(urlWithoutHashParam), hashParamValue);
 		}
 		return false;
 	}
