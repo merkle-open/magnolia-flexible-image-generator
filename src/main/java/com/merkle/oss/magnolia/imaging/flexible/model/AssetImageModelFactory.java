@@ -98,7 +98,8 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 				asset.getLink(),
 				asset.getName(),
 				getSrcSet(bundle, asset, dynamicImageParameter),
-				getCustomRenditions(bundle, asset, dynamicImageParameter)
+				getCustomRenditions(bundle, asset, dynamicImageParameter),
+				asset.getMimeType()
 		);
 	}
 

@@ -16,15 +16,18 @@ public class ImageModel {
 	private final String assetName;
 	private final List<Rendition> srcset;
 	private final Map<String, String> customRenditions;
+    @Nullable
+    private final String mimeType;
 
-	public ImageModel(
+    public ImageModel(
 			final String alt,
 			final String title,
 			final String description,
 			final String original,
 			final String assetName,
 			final List<Rendition> srcset,
-			final Map<String, String> customRenditions
+			final Map<String, String> customRenditions,
+			@Nullable final String mimeType
 	) {
 		this.alt = alt;
 		this.title = title;
@@ -33,7 +36,8 @@ public class ImageModel {
 		this.assetName = assetName;
 		this.srcset = srcset;
 		this.customRenditions = customRenditions;
-	}
+        this.mimeType = mimeType;
+    }
 
 	public String getAlt() {
 		return alt;
@@ -63,17 +67,21 @@ public class ImageModel {
 		return customRenditions;
 	}
 
+	public Optional<String> getMimeType() {
+		return Optional.ofNullable(mimeType);
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ImageModel that = (ImageModel) o;
-		return Objects.equals(alt, that.alt) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(original, that.original) && Objects.equals(assetName, that.assetName) && Objects.equals(srcset, that.srcset) && Objects.equals(customRenditions, that.customRenditions);
+		if (!(o instanceof ImageModel that)) {
+			return false;
+		}
+        return Objects.equals(alt, that.alt) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(original, that.original) && Objects.equals(assetName, that.assetName) && Objects.equals(srcset, that.srcset) && Objects.equals(customRenditions, that.customRenditions) && Objects.equals(mimeType, that.mimeType);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alt, title, description, original, assetName, srcset, customRenditions);
+		return Objects.hash(alt, title, description, original, assetName, srcset, customRenditions, mimeType);
 	}
 
 	@Override
@@ -86,6 +94,7 @@ public class ImageModel {
 				", assetName='" + assetName + '\'' +
 				", srcset=" + srcset +
 				", customRenditions=" + customRenditions +
+				", mimeType='" + mimeType + '\'' +
 				'}';
 	}
 
