@@ -3,11 +3,15 @@ package com.merkle.oss.magnolia.imaging.flexible.generator.uri;
 import info.magnolia.dam.api.Asset;
 import info.magnolia.dam.templating.functions.DamTemplatingFunctions;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.merkle.oss.magnolia.imaging.flexible.model.AssetRatioProvider;
 import com.merkle.oss.magnolia.imaging.flexible.model.FlexibleParameter;
@@ -15,9 +19,10 @@ import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundle;
 import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesProvider;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 
 public class FlexibleImageUriParser {
+	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 	/*
 	 * /<context>/.imaging/flex/assetItemKey/param1Key/param1Value/.../fileName
 	 * e.g. /author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/height/316/width/560/dummy1-1600x900.jpg
@@ -82,7 +87,12 @@ public class FlexibleImageUriParser {
 	}
 
     private boolean isRatioValid(final ProcessedBundle.ImageSize size, final String actualRatio, final Asset asset) {
-		final String validRatio = size.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
-		return Objects.equals(actualRatio, validRatio);
+		try {
+			final String validRatio = size.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
+			return Objects.equals(actualRatio, validRatio);
+		} catch (Exception e) {
+			LOG.error("failed to check if ratio is valid, returning invalid!", e);
+			return false;
+		}
     }
 }
