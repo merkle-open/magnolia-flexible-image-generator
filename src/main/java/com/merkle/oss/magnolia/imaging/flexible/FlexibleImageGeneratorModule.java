@@ -15,6 +15,7 @@ import com.merkle.oss.magnolia.imaging.flexible.model.bundle.ProcessedBundlesPro
 public class FlexibleImageGeneratorModule implements ModuleLifecycle {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private final Provider<ProcessedBundlesProvider> bundlesProviderProvider;
+	private boolean populateBundlesOnStartup = true;
 	private String bundlesConfigPath;
 
 	@Inject
@@ -25,7 +26,10 @@ public class FlexibleImageGeneratorModule implements ModuleLifecycle {
 	@Override
 	public void start(final ModuleLifecycleContext moduleLifecycleContext) {
 		LOG.debug("Starting FlexibleImageGenerator Module");
-		bundlesProviderProvider.get().flush();
+		if(populateBundlesOnStartup()) {
+			LOG.info("populate bundles...");
+			bundlesProviderProvider.get().get();
+		}
 	}
 
 	@Override
@@ -36,8 +40,14 @@ public class FlexibleImageGeneratorModule implements ModuleLifecycle {
 	public String getBundlesConfigPath() {
 		return bundlesConfigPath;
 	}
-
 	public void setBundlesConfigPath(final String bundlesConfigPath) {
 		this.bundlesConfigPath = bundlesConfigPath;
 	}
+
+    public boolean populateBundlesOnStartup() {
+        return populateBundlesOnStartup;
+    }
+    public void setPopulateBundlesOnStartup(final boolean populateBundlesOnStartup) {
+        this.populateBundlesOnStartup = populateBundlesOnStartup;
+    }
 }
