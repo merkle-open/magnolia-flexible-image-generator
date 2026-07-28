@@ -7,14 +7,11 @@ import java.util.Optional;
 
 public class AssetRatioProvider {
 
-	public String get(final Asset asset) {
-		final MagnoliaAssetMetadata metadata = Optional
+	public Optional<String> get(final Asset asset) {
+		return Optional
 				.ofNullable(asset.getMetadata(MagnoliaAssetMetadata.class))
 				.filter(this::isValid)
-				.orElseThrow(() ->
-						new IllegalArgumentException("Asset " + asset.getPath() + " has no width or height!")
-				);
-		return metadata.getWidth().toString() + ":" + metadata.getHeight().toString();
+				.map(metadata -> metadata.getWidth().toString() + ":" + metadata.getHeight().toString());
 	}
 
 	private boolean isValid(final MagnoliaAssetMetadata metadata) {

@@ -88,7 +88,9 @@ public class FlexibleImageUriParser {
 
     private boolean isRatioValid(final ProcessedBundle.ImageSize size, final String actualRatio, final Asset asset) {
 		try {
-			final String validRatio = size.getRatio().orElseGet(() -> assetRatioProvider.get(asset));
+			final String validRatio = size.getRatio().or(() -> assetRatioProvider.get(asset)).orElseThrow(() ->
+				new NullPointerException("ratio not present!")
+			);
 			return Objects.equals(actualRatio, validRatio);
 		} catch (Exception e) {
 			LOG.error("failed to check if ratio is valid, returning invalid!", e);
