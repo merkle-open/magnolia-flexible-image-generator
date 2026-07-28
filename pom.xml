@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.merkle.oss.magnolia</groupId>
-	<artifactId>magnolia-flexible-image-generator</artifactId>
+	<artifactId>magnolia-flexible-image-generator-parent</artifactId>
 	<version>0.2.7-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>${project.artifactId}</name>
 	<description>Magnolia image generator that uses json definitions to generate images</description>
@@ -27,6 +27,9 @@
 			<organizationUrl>https://merkleinc.ch</organizationUrl>
 		</developer>
 	</developers>
+	<modules>
+		<module>magnolia-flexible-image-generator</module>
+	</modules>
 
 	<properties>
 		<!-- check for new versions:  mvn versions:display-property-updates -->
@@ -63,63 +66,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<!-- Magnolia -->
-		<dependency>
-			<groupId>info.magnolia</groupId>
-			<artifactId>magnolia-core</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>info.magnolia.dam</groupId>
-			<artifactId>magnolia-dam-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>info.magnolia.dam</groupId>
-			<artifactId>magnolia-dam-templating</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>info.magnolia.imaging</groupId>
-			<artifactId>magnolia-imaging</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-		</dependency>
-    <dependency>
-      <groupId>jakarta.inject</groupId>
-      <artifactId>jakarta.inject-api</artifactId>
-    </dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>${gson.version}</version>
-		</dependency>
-
-
-		<!-- TESTING DEPENDENCIES -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>info.magnolia</groupId>
-			<artifactId>magnolia-core</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
