@@ -25,7 +25,7 @@ import com.merkle.oss.magnolia.imaging.flexible.model.bundle.RatioParser;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 
-public class AssetImageModelFactory implements ImageModel.Factory {
+public class MagnoliaDamImageModelFactory implements ImageModel.Factory {
 	private static final Set<String> EXCLUDE_FROM_GENERATION_MIME_TYPES = Set.of(
 			"image/svg+xml",
 			"image/gif"
@@ -41,7 +41,7 @@ public class AssetImageModelFactory implements ImageModel.Factory {
 	private final AssetRatioProvider assetRatioProvider;
 
 	@Inject
-	public AssetImageModelFactory(
+	public MagnoliaDamImageModelFactory(
 			final ProcessedBundlesProvider bundlesProvider,
 			final FlexibleImageUriFactory flexibleImageUriFactory,
 			final DamTemplatingFunctions damTemplatingFunctions,
