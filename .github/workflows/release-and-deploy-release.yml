@@ -5,11 +5,48 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
-  release:
-
+  verify-backend:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Maven setup
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [{
+              "id": "magnolia.enterprise.group",
+              "username": "${{secrets.MGNL_NEXUS_USER}}",
+              "password": "${{secrets.MGNL_NEXUS_PASS}}"
+            }]
+      - name: Maven verify
+        run: mvn verify --batch-mode
+  verify-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./magnolia-flexible-image-frontend/.nvmrc
+      - name: Node verify
+        working-directory: ./magnolia-flexible-image-frontend
+        run: npm ci && npm run build && npm run lint
 
+  release:
+    needs: [verify-backend, verify-frontend]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,8 +65,6 @@ jobs:
               "username": "${{secrets.MGNL_NEXUS_USER}}",
               "password": "${{secrets.MGNL_NEXUS_PASS}}"
             }]
-      - name: Maven verify
-        run: mvn verify --batch-mode
       # Install xmllint
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install libxml2-utils
@@ -44,8 +79,7 @@ jobs:
           chmod +x ci/mvn-release.sh
           ci/mvn-release.sh
 
-  deploy-release:
-
+  deploy-release-backend:
     needs: release
     runs-on: ubuntu-latest
 
@@ -79,3 +113,21 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USER }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+  deploy-release-frontend:
+    needs: release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./magnolia-flexible-image-frontend/.nvmrc
+          registry-url: 'https://registry.npmjs.org'
+      - name: Release Node package
+        working-directory: ./magnolia-flexible-image-frontend
+        run: npm ci && npm publish

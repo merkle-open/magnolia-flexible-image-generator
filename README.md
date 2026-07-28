@@ -3,6 +3,7 @@ Magnolia image generator that uses json definitions to generate images.
 
 ## Submodules
 - [Magnolia](magnolia-flexible-image-generator/README.md)
+- [Frontend](magnolia-flexible-image-frontend/README.md)
 
 ## Bundle schema
 ```json

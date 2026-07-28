@@ -1,0 +1,53 @@
+{
+	"name": "@merkle-open/magnolia-flexible-image",
+	"version": "0.0.1-SNAPSHOT",
+	"description": "Frontend image model factory for the Magnolia image generator that uses json definitions to generate images",
+	"license": "MIT",
+	"author": "Merkle Inc.",
+	"private": false,
+	"main": "index.ts",
+	"module": "index.ts",
+	"type": "module",
+	"engines": {
+		"node": ">=24"
+	},
+	"files": [
+		"README.md",
+		"index.ts",
+		"src",
+		"src/**/_README.md"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/merkle-open/magnolia-flexible-image-generator"
+	},
+	"scripts": {
+		"build": "tsc --build",
+		"clean": "tsc --build --clean",
+		"format": "prettier --write src/**",
+		"lint": "eslint src/**",
+		"prepare": "cd .. && husky magnolia-flexible-image-frontend/.husky"
+	},
+	"peerDependencies": {
+		"reflect-metadata": "^0.2",
+		"tsyringe": "^4.10"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.4",
+		"@types/node": "^25.9.5",
+		"@typescript-eslint/eslint-plugin": "^8.56.1",
+		"@typescript-eslint/parser": "^8.56.1",
+		"eslint": "^9.39.3",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-prettier": "^5.5.5",
+		"husky": "^9.1.7",
+		"jiti": "^2.6.1",
+		"lint-staged": "^16.2.7",
+		"prettier": "^3.8.3",
+		"tsx": "^4.21.0",
+		"typescript-eslint": "^8.56.1"
+	},
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx,md,mdx,html,css}": "npm run format"
+	}
+}

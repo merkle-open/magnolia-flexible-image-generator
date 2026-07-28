@@ -6,10 +6,8 @@ on:
       - main
 
 jobs:
-  verify:
-
+  verify-backend:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,3 +27,15 @@ jobs:
             }]
       - name: Maven verify
         run: mvn verify --batch-mode
+  verify-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./magnolia-flexible-image-frontend/.nvmrc
+      - name: Node verify
+        working-directory: ./magnolia-flexible-image-frontend
+        run: npm ci && npm run build && npm run lint
