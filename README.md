@@ -30,7 +30,7 @@ Magnolia image generator that uses json definitions to generate images.
                   "width": {
                      "type": "integer"
                   },
-                  "media": {
+                  "id": {
                      "type": "string",
                      "description": "The media size for the image (e.g. '2880w')"
                   },
@@ -39,7 +39,7 @@ Magnolia image generator that uses json definitions to generate images.
                      "description": "e.g. '16:9'. If not specified here or in the bundle, the original image ratio will be preserved"
                   }
                },
-               "required": [ "width", "media" ]
+               "required": [ "width", "id" ]
             }
          },
          "customRenditions": {
