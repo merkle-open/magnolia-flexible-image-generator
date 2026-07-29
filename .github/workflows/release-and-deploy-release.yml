@@ -76,8 +76,8 @@ jobs:
       # Release, set correct versions and create tag
       - name: Release (versioning/tag)
         run: |
-          chmod +x ci/mvn-release.sh
-          ci/mvn-release.sh
+          chmod +x ci/release.sh
+          ci/release.sh
 
   deploy-release-backend:
     needs: release
