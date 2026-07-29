@@ -1,6 +1,6 @@
 {
 	"name": "@merkle-open/magnolia-flexible-image",
-	"version": "0.0.1-SNAPSHOT",
+	"version": "0.2.7-SNAPSHOT",
 	"description": "Frontend image model factory for the Magnolia image generator that uses json definitions to generate images",
 	"license": "MIT",
 	"author": "Merkle Inc.",
