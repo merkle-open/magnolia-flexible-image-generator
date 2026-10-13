@@ -30,7 +30,7 @@ jobs:
               "password": "${{secrets.MGNL_NEXUS_PASS}}"
             }]
       - name: Maven verify
-        run: mvn verify --batch-mode
+        run: /mvnw verify --batch-mode
   verify-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -108,7 +108,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
       - name: Release Maven package
-        run: mvn deploy -Pdeploy
+        run: ./mvnw deploy -Pdeploy
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USER }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
