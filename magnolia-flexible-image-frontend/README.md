@@ -79,9 +79,10 @@ export default function register(container: DependencyContainer) {
 ```typescript
 import { container } from '../../../Dependencies.ts';
 import bundle1x1 from '../../../config/imaging/generated-bundles/1x1.ts';
-import { Asset, ImageModelFactory } from '@merkle-open/magnolia-flexible-image';
+import { Asset, ImageModelFactory, getContainer, SerializedFlexibleImageConfigProvider } from '@merkle-open/magnolia-flexible-image';
 
-const imageFactory = container.resolve<ImageModelFactory>(ImageModelFactory);
+const flexibleImageConfigProvider = container.resolve<SerializedFlexibleImageConfigProvider>(SerializedFlexibleImageConfigProvider);
+const imageFactory = getContainer(container, flexibleImageConfigProvider.get()).resolve<ImageModelFactory>(ImageModelFactory);
 const asset: Asset = { //should be passed in model from backend
     id: 'jcr:d2cdb6b9-844f-49a2-a177-7f3f501e2361',
     ratio: '1:1',
