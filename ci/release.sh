@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 setVersion(){
-  mvn versions:set -DnewVersion=$1 versions:commit --no-transfer-progress
+  ./mvnw versions:set -DnewVersion=$1 versions:commit --no-transfer-progress
   npm --prefix ./magnolia-flexible-image-frontend version $1
 }
 
