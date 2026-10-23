@@ -19,24 +19,33 @@ export interface SerializedConfig {
 }
 
 @injectable()
-export class SerializedFlexibleImageConfigProvider {
-	constructor(@inject(FLEXIBLE_IMAGE_CONFIG_PROVIDER_TOKEN) private readonly configProvider: FlexibleImageConfigProviderI) {}
-
-	public get(): SerializedConfig {
-		return this.serializeConfig(this.configProvider.get());
-	}
-
-	protected serializeConfig(config: Config): SerializedConfig {
+export class ConfigSerializer {
+	public serialize(config: Config): SerializedConfig {
 		return {
 			flexibleImagingBase: config.magnoliaApisProvider.flexibleImagingBase(),
 		};
 	}
+}
 
-	public deserializeConfig(config: SerializedConfig): Config {
+@injectable()
+export class ConfigDeserializer {
+	public deserialize(config: SerializedConfig): Config {
 		return {
 			magnoliaApisProvider: {
 				flexibleImagingBase: () => config.flexibleImagingBase,
 			},
 		};
+	}
+}
+
+@injectable()
+export class SerializedFlexibleImageConfigProvider {
+	constructor(
+		@inject(FLEXIBLE_IMAGE_CONFIG_PROVIDER_TOKEN) private readonly configProvider: FlexibleImageConfigProviderI,
+		@inject(ConfigSerializer) private readonly configSerializer: ConfigSerializer,
+	) {}
+
+	public get(): SerializedConfig {
+		return this.configSerializer.serialize(this.configProvider.get());
 	}
 }
