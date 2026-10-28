@@ -93,7 +93,7 @@ public class FlexibleImageUriParser {
 			);
 			return Objects.equals(actualRatio, validRatio);
 		} catch (Exception e) {
-			LOG.error("failed to check if ratio is valid, returning invalid!", e);
+			LOG.debug("failed to check if ratio is valid, returning invalid!", e);
 			return false;
 		}
     }
