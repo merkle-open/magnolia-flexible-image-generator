@@ -10,8 +10,9 @@ class MockFlexibleImageConfigProviderI implements FlexibleImageConfigProviderI {
 	get(): Config {
 		return {
 			magnoliaApisProvider: {
-				flexibleImagingBase: () => 'https://magnolia.mock/.imaging/flex',
+				flexibleImagingBase: () => 'https://magnolia.mock/author/.imaging/flex',
 			},
+			saltProvider: () => 'someSalt',
 		};
 	}
 }

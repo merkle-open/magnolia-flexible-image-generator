@@ -51,6 +51,7 @@ export class SampleFlexibleImageConfigProvider implements FlexibleImageConfigPro
         magnoliaApisProvider: {
             flexibleImagingBase: () => `${process.env.MGNL_HOST}/.imaging/flex`,
         },
+        salt: `${process.env.FLEXIBLE_IMAGE_SALT}` //only if HashedURIs are used
     };
 
     public get(): Config {
@@ -70,6 +71,23 @@ import { FLEXIBLE_IMAGE_CONFIG_PROVIDER_TOKEN } from '@merkle-open/magnolia-flex
 export default function register(container: DependencyContainer) {
     container.register(FLEXIBLE_IMAGE_CONFIG_PROVIDER_TOKEN, {useClass: SampleFlexibleImageConfigProvider});
 }
+```
+
+## Hashed uri configuration
+
+To prevent unnecessary generation of images, hashed uri factory/parser can be bound, which generate a hash over the created uri and checks it when parsing, resulting in 404 if it has been modified.
+
+<b>MUST only be used serverside - salt must be secret</b>
+
+### Setup
+
+1. Backend must use hashed uri [see README](../magnolia-flexible-image-generator/README.md)
+2. Bind HashedFlexibleImageUriFactory in `/Dependencies.ts`
+
+```typescript
+//...
+registerFlexibleImageOss(container); //must be prior!
+container.register(FlexibleImageUriFactory, { useClass: HashedFlexibleImageUriFactory });
 ```
 
 ## Usage

@@ -32,4 +32,9 @@ class ImageDigestTest {
                 imageDigest.getHash("someOtherInput")
         );
     }
+
+    @Test
+    void sameOutputAsFrontendImpl() {
+        assertEquals("100766476", imageDigest.getHash("someInput"));
+    }
 }

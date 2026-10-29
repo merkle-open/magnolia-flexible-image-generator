@@ -28,7 +28,7 @@ const factory = testContainer().resolve<FlexibleImageUriFactory>(FlexibleImageUr
 describe('FlexibleImageUriFactory', () => {
 	test('create', () => {
 		expect(factory.create(param)).toStrictEqual(
-			'https://magnolia.mock/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/version/1733184000000/width/100/imageName.jpg',
+			'https://magnolia.mock/author/.imaging/flex/jcr:b3ee7444-4830-4454-abbb-20fc35387032/crop/true/ratio/16:9/version/1733184000000/width/100/imageName.jpg',
 		);
 	});
 });

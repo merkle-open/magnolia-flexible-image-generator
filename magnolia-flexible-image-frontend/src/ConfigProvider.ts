@@ -7,6 +7,7 @@ export interface MagnoliaApiEndpointsProvider {
 
 export interface Config {
 	magnoliaApisProvider: MagnoliaApiEndpointsProvider;
+	saltProvider?: () => string; //only required for HashedFlexibleImageUriFactory can't be used on client side
 }
 
 export interface FlexibleImageConfigProviderI {
@@ -15,6 +16,7 @@ export interface FlexibleImageConfigProviderI {
 export const FLEXIBLE_IMAGE_CONFIG_PROVIDER_TOKEN = token('FlexibleImageConfigProviderI');
 
 export interface SerializedConfig {
+	//don't include salt - hashed uri must not be used on client side
 	flexibleImagingBase: string;
 }
 
