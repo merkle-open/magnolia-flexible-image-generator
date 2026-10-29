@@ -1,17 +1,34 @@
 import { globSync, readFileSync } from 'fs';
+import { z } from 'zod';
 
 export interface Bundle {
 	bundle: string;
 	ratio?: string;
-	imageSizes: ImageSize[];
-	customRenditions: ImageSize[];
+	imageSizes?: ImageSize[];
+	customRenditions?: ImageSize[];
 }
 
 export interface ImageSize {
 	id: string;
-	width?: number;
-	ratio: string;
+	width: number;
+	ratio?: string;
 }
+
+const ImageSizeSchema = z
+	.object({
+		id: z.string(),
+		width: z.number(),
+		ratio: z.string().optional(),
+	})
+	.strip() satisfies z.ZodType<ImageSize>;
+const BundleSchema = z
+	.object({
+		bundle: z.string(),
+		ratio: z.string().optional(),
+		imageSizes: z.array(ImageSizeSchema).optional(),
+		customRenditions: z.array(ImageSizeSchema).optional(),
+	})
+	.strip() satisfies z.ZodType<Bundle>;
 
 interface BundlesConfig {
 	scanPaths: string[];
@@ -38,6 +55,6 @@ export class BundlesParser {
 		return globSync(`${path}/**${bundlesDirName}/*.json`)
 			.map((file) => readFileSync(file, 'utf8'))
 			.map((json) => JSON.parse(json))
-			.flatMap((bundles: Bundle[][]): Bundle[] => bundles.flatMap((bundle) => bundle));
+			.flatMap((bundles: Bundle[][]): Bundle[] => bundles.flatMap((bundle) => BundleSchema.parse(bundle)));
 	}
 }

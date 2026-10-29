@@ -1,0 +1,4 @@
+{
+	"scanPaths": ["tests/scripts/bundle/"],
+	"bundlesDirName": "_bundles"
+}

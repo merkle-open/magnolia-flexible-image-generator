@@ -31,7 +31,8 @@
 	},
 	"peerDependencies": {
 		"reflect-metadata": "^0.2",
-		"tsyringe": "^4.10"
+		"tsyringe": "^4.10",
+		"zod": "^4.6"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
