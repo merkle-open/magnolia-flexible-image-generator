@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.merkle.oss.magnolia</groupId>
     <artifactId>magnolia-flexible-image-generator-parent</artifactId>
-    <version>0.2.11-SNAPSHOT</version>
+    <version>0.2.11</version>
   </parent>
 
   <artifactId>magnolia-flexible-image-generator</artifactId>
