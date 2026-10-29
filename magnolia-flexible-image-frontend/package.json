@@ -26,6 +26,7 @@
 		"clean": "tsc --build --clean",
 		"format": "prettier --write src/**",
 		"lint": "eslint src/**",
+		"test": "vitest run",
 		"prepare": "cd .. && husky magnolia-flexible-image-frontend/.husky"
 	},
 	"peerDependencies": {
@@ -45,7 +46,8 @@
 		"lint-staged": "^17.2.0",
 		"prettier": "^3.9.6",
 		"tsx": "^4.23.1",
-		"typescript-eslint": "^8.65.0"
+		"typescript-eslint": "^8.65.0",
+		"vitest": "^5.0.5"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx,md,mdx,html,css}": "npm run format"

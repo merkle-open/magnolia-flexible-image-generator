@@ -38,4 +38,4 @@ jobs:
           node-version-file: ./magnolia-flexible-image-frontend/.nvmrc
       - name: Node verify
         working-directory: ./magnolia-flexible-image-frontend
-        run: npm ci && npm run build && npm run lint
+        run: npm ci && npm run build && npm run lint && npm run test
