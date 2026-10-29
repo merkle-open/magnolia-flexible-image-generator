@@ -16,13 +16,16 @@ export class FlexibleImageUriFactory {
 	 */
 	public create(data: FlexibleParameter): string {
 		const parameters = data.toMap();
-		return [
-			this.magnoliaFlexibleImageBaseUrl,
-			data.id,
-			...Object.keys(parameters)
-				.sort()
-				.flatMap((key) => [key, parameters[key]]),
-			data.name,
-		].join('/');
+		return encodeURI(
+			[
+				this.magnoliaFlexibleImageBaseUrl,
+				data.id,
+				...Object.keys(parameters)
+					.sort()
+					.filter((key) => parameters[key])
+					.flatMap((key) => [key, parameters[key]]),
+				data.name,
+			].join('/'),
+		);
 	}
 }
