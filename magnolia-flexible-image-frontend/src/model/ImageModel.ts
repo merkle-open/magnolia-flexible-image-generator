@@ -16,5 +16,5 @@ export interface Rendition {
 	ratio: number;
 }
 export type CustomRenditions = {
-	[name: string]: string[];
+	[name: string]: string;
 };
