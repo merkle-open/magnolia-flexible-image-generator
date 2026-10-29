@@ -1,0 +1,16 @@
+[
+	{
+		"bundle": "no-image-sizes",
+		"description": "testing bundle without image sizes",
+		"customRenditions": [
+			{
+				"id": "fallbackImage",
+				"width": 560
+			},
+			{
+				"id": "previewImage",
+				"width": 16
+			}
+		]
+	}
+]

@@ -63,7 +63,7 @@ Magnolia image generator that uses json definitions to generate images.
             }
          }
       },
-      "required": [ "bundle", "imageSizes", "customRenditions"]
+      "required": [ "bundle" ]
    }
 }
 ```

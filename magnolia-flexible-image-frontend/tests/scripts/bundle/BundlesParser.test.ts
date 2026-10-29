@@ -47,6 +47,21 @@ describe('Bundle Parser', () => {
 						{ id: 'previewImage', width: 16 },
 					],
 				},
+				{
+					bundle: 'no-custom-renditions',
+					imageSizes: [
+						{ id: '560w', width: 560, ratio: '1:1' },
+						{ id: '1120w', width: 1120 },
+						{ id: '2208w', width: 2208 },
+					],
+				},
+				{
+					bundle: 'no-image-sizes',
+					customRenditions: [
+						{ id: 'fallbackImage', width: 560 },
+						{ id: 'previewImage', width: 16 },
+					],
+				},
 			].sort(sort),
 		);
 	});

@@ -1,5 +1,6 @@
 package com.merkle.oss.magnolia.imaging.flexible.model.bundle;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,14 +14,16 @@ class Bundle {
 	private final String name;
 	@Nullable
 	private final String ratio;
+	@Nullable
 	private final List<ImageSize> imageSizes;
+	@Nullable
 	private final List<ImageSize> customRenditions;
 
 	Bundle(
 			final String name,
 			@Nullable final String ratio,
-			final List<ImageSize> imageSizes,
-			final List<ImageSize> customRenditions
+			@Nullable final List<ImageSize> imageSizes,
+			@Nullable final List<ImageSize> customRenditions
 	) {
 		this.name = name;
 		this.ratio = ratio;
@@ -37,19 +40,19 @@ class Bundle {
 	}
 
 	public List<ImageSize> getImageSizes() {
-		return imageSizes;
+		return Optional.ofNullable(imageSizes).orElseGet(Collections::emptyList);
 	}
 
 	public List<ImageSize> getCustomRenditions() {
-		return customRenditions;
+		return Optional.ofNullable(customRenditions).orElseGet(Collections::emptyList);
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Bundle bundle = (Bundle) o;
-		return Objects.equals(name, bundle.name) && Objects.equals(ratio, bundle.ratio) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
+		if (!(o instanceof Bundle bundle)) {
+			return false;
+		}
+        return Objects.equals(name, bundle.name) && Objects.equals(ratio, bundle.ratio) && Objects.equals(imageSizes, bundle.imageSizes) && Objects.equals(customRenditions, bundle.customRenditions);
 	}
 
 	@Override

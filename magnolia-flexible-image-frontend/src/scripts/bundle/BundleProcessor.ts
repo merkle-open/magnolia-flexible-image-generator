@@ -14,17 +14,20 @@ export class BundleProcessor {
 	}
 
 	private processImageSizes(bundleName: string, imageSizes: BundleImageSize[], bundleRatio?: string): ImageSize[] {
-		return imageSizes.map((imageSize) => {
-			return {
-				ratio: this.validateRatioOrThrow(bundleName, imageSize.ratio ?? bundleRatio),
-				width: imageSize.width,
-				id: imageSize.id,
-			};
-		});
+		if (imageSizes) {
+			return imageSizes.map((imageSize) => {
+				return {
+					ratio: this.validateRatioOrThrow(bundleName, imageSize.ratio ?? bundleRatio),
+					width: imageSize.width,
+					id: imageSize.id,
+				};
+			});
+		}
+		return [];
 	}
 
-	private validateRatioOrThrow(bundleName: string, ratio?: string): string {
-		if (ratio != null) {
+	private validateRatioOrThrow(bundleName: string, ratio?: string): string | undefined {
+		if (ratio) {
 			try {
 				this.ratioParser.parse(ratio);
 			} catch (e) {

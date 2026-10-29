@@ -25,11 +25,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 public class BundlesParser {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private final Gson gson;
+
+	public BundlesParser() {
+		this.gson = new GsonBuilder().create();
+	}
 
 	Stream<Bundle> parse(final String bundlesConfigFilePath) {
 		return getBundleConfig(bundlesConfigFilePath)
@@ -93,7 +99,7 @@ public class BundlesParser {
 	private Stream<Bundle> create(final Path bundleJson) {
 		try (final BufferedReader reader = Files.newBufferedReader(bundleJson)) {
 			LOG.info("Load bundle '{}'", bundleJson);
-			return Arrays.stream(new Gson().fromJson(reader, Bundle[].class));
+			return Arrays.stream(gson.fromJson(reader, Bundle[].class));
 		} catch (IOException e) {
 			LOG.error("Cannot open file {}", bundleJson);
 			return Stream.empty();

@@ -1,0 +1,21 @@
+[
+	{
+		"bundle": "no-custom-renditions",
+		"description": "testing bundle without custom renditions",
+		"imageSizes": [
+			{
+				"ratio": "1:1",
+				"id": "560w",
+				"width": 560
+			},
+			{
+				"id": "1120w",
+				"width": 1120
+			},
+			{
+				"id": "2208w",
+				"width": 2208
+			}
+		]
+	}
+]
