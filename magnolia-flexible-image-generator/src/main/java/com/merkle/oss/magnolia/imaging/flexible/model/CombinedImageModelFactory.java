@@ -24,4 +24,13 @@ public class CombinedImageModelFactory implements ImageModel.Factory {
 				.flatMap(Optional::stream)
 				.findFirst();
 	}
+
+	@Override
+	public Optional<ImageModel> create(final AssetModel asset, final String bundleName, @Nullable final DynamicImageParameter dynamicImageParameter) {
+		return factories
+				.stream()
+				.map(factory -> factory.create(asset, bundleName, dynamicImageParameter))
+				.flatMap(Optional::stream)
+				.findFirst();
+	}
 }

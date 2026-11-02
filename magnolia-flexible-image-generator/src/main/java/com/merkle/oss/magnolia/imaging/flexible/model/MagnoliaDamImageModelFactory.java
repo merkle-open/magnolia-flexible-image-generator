@@ -45,10 +45,18 @@ public class MagnoliaDamImageModelFactory implements ImageModel.Factory {
 	@Override
 	public Optional<ImageModel> create(final Locale locale, final String assetId, final String bundleName, @Nullable final DynamicImageParameter dynamicImageParameter) {
 		return magnoliaDamAssetModelFactory.create(locale, assetId).flatMap(asset ->
-				bundlesProvider.get(bundleName).map(bundle ->
-						create(asset, bundle, dynamicImageParameter)
-				)
+				create(asset, bundleName, dynamicImageParameter)
 		);
+	}
+
+	@Override
+	public Optional<ImageModel> create(final AssetModel asset, final String bundleName, @Nullable final DynamicImageParameter dynamicImageParameter) {
+		if (asset instanceof MagnoliaAssetModel magnoliaAsset) {
+			return bundlesProvider.get(bundleName).map(bundle ->
+					create(magnoliaAsset, bundle, dynamicImageParameter)
+			);
+		}
+		return Optional.empty();
 	}
 
 	private ImageModel create(

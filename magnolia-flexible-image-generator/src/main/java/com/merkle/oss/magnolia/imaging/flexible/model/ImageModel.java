@@ -171,7 +171,14 @@ public class ImageModel {
 		default Optional<ImageModel> create(Locale locale, String assetId, String bundleName) {
 			return create(locale, assetId, bundleName, null);
 		}
-
 		Optional<ImageModel> create(Locale locale, String assetId, String bundleName, @Nullable DynamicImageParameter dynamicImageParameter);
+
+		/**
+		 * @return an imageModel if the assedId matches (e.g. "jcr:..." for dam) or empty
+		 */
+		default Optional<ImageModel> create(AssetModel asset, String bundleName) {
+			return create(asset, bundleName, null);
+		}
+		Optional<ImageModel> create(AssetModel asset, String bundleName, @Nullable DynamicImageParameter dynamicImageParameter);
 	}
 }
