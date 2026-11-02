@@ -22,15 +22,15 @@ Magnolia image generator that uses json definitions to generate images.
           "imageSizes": [
             {
               "width": 720,
-              "media": "720w"
+              "id": "720w"
             },
             {
               "width": 1280,
-              "media": "1280w"
+              "id": "1280w"
             },
             {
               "width": 2880,
-              "media": "2880w"
+              "id": "2880w"
             }
           ],
           "customRenditions": [
