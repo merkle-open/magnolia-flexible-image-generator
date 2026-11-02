@@ -20,6 +20,19 @@ public class AssetModel {
     @Nullable
     private final String mimeType;
 
+    public AssetModel(final AssetModel wrapped) {
+        this(
+                wrapped.getId(),
+                wrapped.getName(),
+                wrapped.getAlt(),
+                wrapped.getTitle(),
+                wrapped.getDescription(),
+                wrapped.getSrc(),
+                wrapped.getVersion(),
+                wrapped.getRatio().orElse(null),
+                wrapped.getMimeType().orElse(null)
+        );
+    }
     public AssetModel(
             final String id,
             final String name,
@@ -40,6 +53,10 @@ public class AssetModel {
         this.mimeType = mimeType;
         this.version = version;
         this.ratio = ratio;
+    }
+
+    public AssetModel withAlt(final String alt) {
+        return new AssetModel(id, name, alt, title, description, src, version, ratio, mimeType);
     }
 
     public String getId() {
